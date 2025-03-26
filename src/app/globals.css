@@ -1,0 +1,276 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  input,
+  textarea {
+    text-align: right;
+  }
+}
+
+@layer components {
+  .verse-container {
+    @apply py-3 border-b border-border/30 last:border-0;
+  }
+
+  .verse-number {
+    @apply min-h-9 min-w-9 rounded-full flex items-center justify-center bg-primary/10 text-primary text-sm font-medium flex-shrink-0 shadow-sm ml-2 mr-0;
+  }
+
+  .verse-text {
+    @apply font-arabic text-right leading-loose tracking-wide flex-1;
+  }
+
+  .page-number {
+    @apply absolute bottom-2 left-1/2 -translate-x-1/2 text-sm text-muted-foreground bg-muted/30 px-3 py-0.5 rounded-full;
+  }
+
+  .quran-page {
+    @apply min-h-[70vh] bg-card rounded-md p-6 shadow-sm relative;
+  }
+}
+
+/* Custom utility class for Arabic text */
+.font-arabic {
+  font-family: var(--font-uthmanic);
+  letter-spacing: 0.01em;
+}
+
+/* Page-like container for Quran verses */
+.quran-page {
+  min-height: 70vh;
+  background-color: hsl(var(--card));
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+/* Verse container styling */
+.verse-container {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid hsl(var(--border) / 0.3);
+}
+
+.verse-container:last-child {
+  border-bottom: none;
+}
+
+/* Verse container layout with proper RTL support */
+.verse-container .flex {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: flex-start;
+}
+
+/* Enhance the verse text */
+.verse-text {
+  font-family: var(--font-uthmanic);
+  text-align: right;
+  line-height: 2;
+  letter-spacing: 0.02em;
+  word-spacing: 0.05em;
+  flex: 1;
+}
+
+/* Fix direction for Arabic content */
+[dir="rtl"] .space-x-1 > * + * {
+  margin-right: 0.25rem;
+  margin-left: 0;
+}
+
+[dir="rtl"] .space-x-2 > * + * {
+  margin-right: 0.5rem;
+  margin-left: 0;
+}
+
+[dir="rtl"] .space-x-3 > * + * {
+  margin-right: 0.75rem;
+  margin-left: 0;
+}
+
+[dir="rtl"] .space-x-4 > * + * {
+  margin-right: 1rem;
+  margin-left: 0;
+}
+
+/* Page number indicator */
+.page-number {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+  background-color: hsl(var(--muted) / 0.3);
+  padding: 2px 12px;
+  border-radius: 9999px;
+}
+
+/* Dark mode adjustments */
+.dark .verse-number {
+  background-color: hsl(var(--primary) / 0.2);
+}
+
+.dark .quran-page {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Enhance scrollbar for better UX in Quran reading */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+/* loader css */
+.loader {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+}
+.spinner {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  border: 3px solid #0000;
+  border-radius: 50%;
+  border-right-color: var(--primary-color);
+  -webkit-animation: spinner-a4dj62 1s infinite linear;
+  animation: spinner-a4dj62 1s infinite linear;
+}
+
+.spinner::before,
+.spinner::after {
+  content: "";
+  grid-area: 1/1;
+  margin: 3px;
+  border: inherit;
+  border-radius: 50%;
+  -webkit-animation: spinner-a4dj62 2s infinite;
+  animation: spinner-a4dj62 2s infinite;
+}
+
+.spinner::after {
+  margin: 8px;
+  -webkit-animation-duration: 3s;
+  animation-duration: 3s;
+}
+
+@-webkit-keyframes spinner-a4dj62 {
+  100% {
+    -webkit-transform: rotate(1turn);
+    transform: rotate(1turn);
+  }
+}
+
+@keyframes spinner-a4dj62 {
+  100% {
+    -webkit-transform: rotate(1turn);
+    transform: rotate(1turn);
+  }
+}
+
+/* ? matieres option style */
+[data-radix-popper-content-wrapper] {
+  width: 95%;
+}
+
+@media screen and (min-width: 640px) {
+  [data-radix-popper-content-wrapper] {
+    width: 40%;
+  }
+}
+
+
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
