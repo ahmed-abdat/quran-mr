@@ -11,6 +11,7 @@ export function useQuranSearch() {
   const [searchResults, setSearchResults] = useState<Ayah[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [searchInitiated, setSearchInitiated] = useState(false);
 
   // Load recent searches from localStorage
   useEffect(() => {
@@ -24,27 +25,37 @@ export function useQuranSearch() {
     }
   }, []);
 
-  // Save recent searches to localStorage
-  const saveRecentSearch = (query: string) => {
-    if (!query.trim()) return;
-
-    // Update recent searches list (add to front, remove duplicates, limit to 5)
-    const updatedRecent = [
-      query,
-      ...recentSearches.filter((s) => s !== query),
-    ].slice(0, 5);
-
-    setRecentSearches(updatedRecent);
-
-    try {
-      localStorage.setItem(
-        "quranRecentSearches",
-        JSON.stringify(updatedRecent)
-      );
-    } catch (e) {
-      console.error("Failed to save recent searches", e);
+  // Reset searchInitiated when query changes
+  useEffect(() => {
+    if (searchQuery === "") {
+      setSearchInitiated(false);
     }
-  };
+  }, [searchQuery]);
+
+  // Save recent searches to localStorage
+  const saveRecentSearch = useCallback(
+    (query: string) => {
+      if (!query.trim()) return;
+
+      // Update recent searches list (add to front, remove duplicates, limit to 5)
+      const updatedRecent = [
+        query,
+        ...recentSearches.filter((s) => s !== query),
+      ].slice(0, 5);
+
+      setRecentSearches(updatedRecent);
+
+      try {
+        localStorage.setItem(
+          "quranRecentSearches",
+          JSON.stringify(updatedRecent)
+        );
+      } catch (e) {
+        console.error("Failed to save recent searches", e);
+      }
+    },
+    [recentSearches]
+  );
 
   // Perform search
   const performSearch = useCallback(
@@ -52,6 +63,7 @@ export function useQuranSearch() {
       if (!query.trim()) return;
 
       setIsSearching(true);
+      setSearchInitiated(true);
 
       try {
         // Using setTimeout to show loading state and avoid blocking UI
@@ -66,13 +78,14 @@ export function useQuranSearch() {
         setIsSearching(false);
       }
     },
-    [recentSearches]
+    [saveRecentSearch]
   );
 
   // Clear search results
   const clearSearch = () => {
     setSearchQuery("");
     setSearchResults([]);
+    setSearchInitiated(false);
   };
 
   // Clear all recent searches
@@ -132,6 +145,7 @@ export function useQuranSearch() {
     searchResults,
     isSearching,
     recentSearches,
+    searchInitiated,
     performSearch,
     clearSearch,
     clearRecentSearches,

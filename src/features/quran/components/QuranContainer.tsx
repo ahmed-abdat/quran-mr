@@ -1,17 +1,17 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTheme } from "@/components/ThemeProvider";
 import { SurahListView } from "./QuranViews/SurahListView";
 import { SurahView } from "./QuranViews/SurahView";
 import { SearchView } from "./QuranViews/SearchView";
-import { NavigationBar } from "./QuranNavigation/NavigationBar";
 import { BottomBar } from "./QuranNavigation/BottomBar";
 import { useQuranData } from "../hooks/useQuranData";
 import { useQuranNavigation } from "../hooks/useQuranNavigation";
 import { useQuranSettings } from "../hooks/useQuranSettings";
 import { useQuranSearch } from "../hooks/useQuranSearch";
-import { Ayah } from "../types/quran-types";
+import { cn } from "@/lib/utils";
+import { NavigationBar } from "./QuranNavigation/NavigationBar";
 
 interface QuranContainerProps {
   initialView?: "surah-list" | "surah" | "search";
@@ -30,6 +30,12 @@ export function QuranContainer({
 }: QuranContainerProps) {
   const { theme } = useTheme();
   const isDarkMode = theme === "dark";
+  const [isUIVisible, setIsUIVisible] = useState(true);
+
+  // Toggle UI visibility
+  const toggleUIVisibility = () => {
+    setIsUIVisible((prev) => !prev);
+  };
 
   // Custom hooks for Quran functionality
   const {
@@ -64,6 +70,7 @@ export function QuranContainer({
     decreaseFontSize,
     toggleTheme,
     setCurrentPage,
+    toggleViewMode,
   } = useQuranSettings();
 
   const {
@@ -71,22 +78,27 @@ export function QuranContainer({
     searchResults,
     isSearching,
     recentSearches,
+    searchInitiated,
     setSearchQuery,
     performSearch,
     clearSearch,
     clearRecentSearches,
-    highlightSearchText,
     removeSearchTerm,
+    highlightSearchText,
   } = useQuranSearch();
 
   // Current surah data
   const currentSurah = activeSurahId ? getSurah(activeSurahId) : null;
 
-  // Default pagination values (not used in continuous mode)
+  // Pagination values
   const itemsPerPage = getItemsPerPage();
   const totalAyahs = currentSurah?.ayahs.length || 0;
   const totalPages = Math.ceil(totalAyahs / itemsPerPage);
-  const pageAyahs: Ayah[] = [];
+
+  // Get ayahs for the current page (only used in carousel mode)
+  const pageAyahs = currentSurah
+    ? getPaginatedAyahs(currentSurah, currentPage, itemsPerPage)
+    : [];
 
   // Navigation availability
   const hasPrevSurah = activeSurahId ? activeSurahId > 1 : false;
@@ -107,25 +119,41 @@ export function QuranContainer({
     return "القرآن الكريم";
   };
 
+  // Always show UI when not in surah view or when changing views
+  useEffect(() => {
+    if (activeView !== "surah-view") {
+      setIsUIVisible(true);
+    }
+  }, [activeView]);
+
   return (
     <div className="flex flex-col min-h-screen">
-      <NavigationBar
-        title={getPageTitle()}
-        allSurahs={allSurahs}
-        currentSurahId={activeSurahId}
-        hasPrevSurah={hasPrevSurah}
-        hasNextSurah={hasNextSurah}
-        navigateToSurahList={navigateToSurahList}
-        navigateToSearch={navigateToSearch}
-        navigateToSurah={navigateToSurah}
-        navigateToPrevSurah={navigateToPrevSurah}
-        navigateToNextSurah={navigateToNextSurah}
-        viewMode={viewMode}
-        darkMode={isDarkMode}
-        onToggleTheme={toggleTheme}
-      />
+      {/* Show NavigationBar only for surah-list and search views */}
+      {(activeView === "surah-list" || activeView === "search") && (
+        <NavigationBar
+          title={getPageTitle()}
+          allSurahs={allSurahs}
+          currentSurahId={activeSurahId}
+          hasPrevSurah={hasPrevSurah}
+          hasNextSurah={hasNextSurah}
+          navigateToSurahList={navigateToSurahList}
+          navigateToSearch={navigateToSearch}
+          navigateToSurah={navigateToSurah}
+          navigateToPrevSurah={navigateToPrevSurah}
+          navigateToNextSurah={navigateToNextSurah}
+          viewMode={viewMode}
+          darkMode={isDarkMode}
+          onToggleTheme={toggleTheme}
+          onToggleViewMode={toggleViewMode}
+        />
+      )}
 
-      <main className="flex-1 container mx-auto p-4">
+      <main
+        className={cn(
+          "flex-1 container mx-auto",
+          activeView === "surah-view" ? (isUIVisible ? "p-0" : "p-0") : "p-4"
+        )}
+      >
         {activeView === "surah-list" && (
           <SurahListView surahs={allSurahs} onSurahSelect={navigateToSurah} />
         )}
@@ -137,6 +165,7 @@ export function QuranContainer({
             searchResults={searchResults}
             isSearching={isSearching}
             recentSearches={recentSearches}
+            searchInitiated={searchInitiated}
             performSearch={performSearch}
             clearSearch={clearSearch}
             clearRecentSearches={clearRecentSearches}
@@ -149,24 +178,46 @@ export function QuranContainer({
           <SurahView
             surah={currentSurah}
             activeAyahId={activeAyahId}
-            viewMode={viewMode}
+            viewMode="continuous"
             fontSize={fontSize}
             currentPage={currentPage}
             totalPages={totalPages}
             pageAyahs={pageAyahs}
             highlightSearchText={highlightSearchText}
             searchQuery={searchQuery}
+            toggleUIVisibility={toggleUIVisibility}
+            isUIVisible={isUIVisible}
+            darkMode={isDarkMode}
           />
         )}
+
+        {/* Carousel view is temporarily disabled 
+        {activeView === "surah-view" && currentSurah && viewMode === "carousel" && (
+          <CarouselView
+            surah={currentSurah}
+            activeAyahId={activeAyahId}
+            fontSize={fontSize}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            pageAyahs={pageAyahs}
+            itemsPerPage={itemsPerPage}
+            highlightSearchText={highlightSearchText}
+            searchQuery={searchQuery}
+            onPageChange={setCurrentPage}
+            toggleUIVisibility={toggleUIVisibility}
+            isUIVisible={isUIVisible}
+          />
+        )}
+        */}
       </main>
 
-      {/* Only show BottomBar when viewing a surah */}
+      {/* Only show BottomBar when UI is visible or not in surah-view */}
       {activeView === "surah-view" && currentSurah && (
         <BottomBar
-          viewMode={viewMode}
+          viewMode="continuous"
           fontSize={fontSize}
-          currentPage={currentPage}
-          totalPages={totalPages}
+          currentPage={1}
+          totalPages={1}
           hasPrevSurah={hasPrevSurah}
           hasNextSurah={hasNextSurah}
           navigateToPrevSurah={navigateToPrevSurah}
@@ -174,6 +225,15 @@ export function QuranContainer({
           onFontSizeIncrease={increaseFontSize}
           onFontSizeDecrease={decreaseFontSize}
           onPageChange={setCurrentPage}
+          onToggleViewMode={toggleViewMode}
+          navigateToHome={navigateToSurahList}
+          navigateToSearch={navigateToSearch}
+          darkMode={isDarkMode}
+          onToggleTheme={toggleTheme}
+          allSurahs={allSurahs}
+          currentSurahId={activeSurahId}
+          navigateToSurah={navigateToSurah}
+          isUIVisible={isUIVisible}
         />
       )}
     </div>

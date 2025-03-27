@@ -381,8 +381,12 @@
 
 /* Active Ayah Highlight */
 .active-ayah {
-  background-color: rgba(210, 180, 140, 0.15);
-  border-radius: 3px;
+  color: theme("colors.primary.DEFAULT");
+  background-color: rgba(var(--primary-rgb) / 0.1);
+  border-radius: 0.25rem;
+  padding: 0.25rem;
+  display: inline-block;
+  transition: all 0.3s ease;
 }
 
 /* Enhanced typography for the mushaf */

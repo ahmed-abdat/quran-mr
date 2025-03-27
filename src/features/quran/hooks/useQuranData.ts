@@ -68,13 +68,20 @@ export function useQuranData() {
    * Get paginated ayahs for a surah
    */
   const getPaginatedAyahs = (
-    surah: Surah | undefined,
+    surahIdOrObject: number | Surah | undefined,
     page: number,
     itemsPerPage: number
   ): Ayah[] => {
+    let surah: Surah | undefined;
+
+    if (typeof surahIdOrObject === "number") {
+      surah = getSurah(surahIdOrObject);
+    } else {
+      surah = surahIdOrObject;
+    }
+
     if (!surah) return [];
 
-    const totalPages = Math.ceil(surah.ayahs.length / itemsPerPage);
     const startIdx = (page - 1) * itemsPerPage;
     const endIdx = Math.min(startIdx + itemsPerPage, surah.ayahs.length);
 

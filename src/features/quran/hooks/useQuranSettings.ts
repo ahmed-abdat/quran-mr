@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useTheme } from "@/components/ThemeProvider";
 
 // Available view modes for the Quran
-export type QuranViewMode = "continuous";
+export type QuranViewMode = "continuous" | "carousel";
 
 // Available font options for the Quran
 export enum QuranFont {
@@ -18,23 +18,22 @@ export enum QuranFont {
 export function useQuranSettings() {
   const { theme, setTheme } = useTheme();
   const [fontSize, setFontSize] = useState(24);
-  const [viewMode] = useState<QuranViewMode>("continuous");
+  const [viewMode, setViewMode] = useState<QuranViewMode>("continuous");
   const [currentPage, setCurrentPage] = useState(1);
   const [showTranslation, setShowTranslation] = useState(false);
-  // Always use Warsh font by default
-  const fontType = QuranFont.UTHMANIC_WARSH;
 
-  // Number of ayahs to show per page (now always shows all)
+  // Number of ayahs to show per page
   const getItemsPerPage = () => {
-    return 999; // Show all ayahs
+    return viewMode === "carousel" ? 10 : 999; // Show 10 ayahs per page in carousel mode, all in continuous
   };
 
-  // Load font size from localStorage
+  // Load settings from localStorage
   useEffect(() => {
     try {
       // Load settings from localStorage
       const savedFontSize = localStorage.getItem("quranFontSize");
       const savedShowTranslation = localStorage.getItem("quranShowTranslation");
+      const savedViewMode = localStorage.getItem("quranViewMode");
 
       if (savedFontSize) {
         setFontSize(parseInt(savedFontSize));
@@ -43,12 +42,16 @@ export function useQuranSettings() {
       if (savedShowTranslation) {
         setShowTranslation(savedShowTranslation === "true");
       }
+
+      if (savedViewMode) {
+        setViewMode(savedViewMode as QuranViewMode);
+      }
     } catch (e) {
       console.error("Failed to load Quran settings", e);
     }
   }, []);
 
-  // Save font size to localStorage when changed
+  // Save settings to localStorage when changed
   useEffect(() => {
     try {
       localStorage.setItem("quranFontSize", fontSize.toString());
@@ -56,6 +59,14 @@ export function useQuranSettings() {
       console.error("Failed to save font size", e);
     }
   }, [fontSize]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("quranViewMode", viewMode);
+    } catch (e) {
+      console.error("Failed to save view mode", e);
+    }
+  }, [viewMode]);
 
   // Save translation preference to localStorage when changed
   useEffect(() => {
@@ -79,6 +90,12 @@ export function useQuranSettings() {
     }
   };
 
+  // Toggle view mode
+  const toggleViewMode = () => {
+    setViewMode(viewMode === "continuous" ? "carousel" : "continuous");
+    setCurrentPage(1); // Reset to first page when toggling view mode
+  };
+
   // Toggle theme
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -100,6 +117,7 @@ export function useQuranSettings() {
     setCurrentPage,
     toggleTheme,
     toggleTranslation,
+    toggleViewMode,
     theme,
   };
 }

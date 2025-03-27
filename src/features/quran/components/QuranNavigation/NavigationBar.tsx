@@ -27,6 +27,7 @@ interface NavigationBarProps {
   viewMode: QuranViewMode;
   darkMode: boolean;
   onToggleTheme: () => void;
+  onToggleViewMode: () => void;
 }
 
 /**
@@ -44,6 +45,7 @@ export function NavigationBar({
   viewMode,
   darkMode,
   onToggleTheme,
+  onToggleViewMode,
 }: NavigationBarProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -91,6 +93,21 @@ export function NavigationBar({
         </div>
 
         <div className="flex items-center">
+          {/* Toggle view mode button (if viewing a surah) */}
+          {currentSurahId && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onToggleViewMode}
+              aria-label={
+                viewMode === "continuous" ? "وضع الصفحات" : "العرض المتواصل"
+              }
+              className="transition-all hover:bg-secondary/20 px-2 mr-1 text-xs"
+            >
+              {viewMode === "continuous" ? "وضع الصفحات" : "العرض المتواصل"}
+            </Button>
+          )}
+
           {/* Other actions */}
           <div className="flex items-center">
             <Button

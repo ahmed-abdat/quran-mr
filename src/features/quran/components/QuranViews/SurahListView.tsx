@@ -2,10 +2,9 @@
 
 import { useState } from "react";
 import { Surah } from "../../types/quran-types";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Search } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface SurahListViewProps {
   surahs: Surah[];
@@ -27,53 +26,62 @@ export function SurahListView({ surahs, onSurahSelect }: SurahListViewProps) {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
+      {/* Header */}
+      <div className="text-center py-2">
+        <h1 className="text-2xl font-medium">الفهرست</h1>
+      </div>
+
       {/* Search box */}
-      <Card className="p-3 border">
+      <div className="rounded-lg border overflow-hidden">
         <div className="relative">
           <Input
             placeholder="البحث عن سورة..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pr-10"
+            className="border-0 pr-10 h-12 focus-visible:ring-0 text-right"
           />
-          <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Search className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
         </div>
-      </Card>
+      </div>
 
-      {/* Surah grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-        {filteredSurahs.map((surah) => (
-          <Card
-            key={surah.id}
-            className="overflow-hidden cursor-pointer hover:bg-muted/20 transition-colors border"
-            onClick={() => onSurahSelect(surah.id)}
-          >
-            <div className="flex items-center justify-between p-4 border-b">
-              <div className="flex-1 text-right">
-                <h3 className="font-surah-names text-2xl leading-tight">
+      {/* Surah list - simplified clean design */}
+      <div className="border rounded-lg overflow-hidden">
+        <div className="divide-y">
+          {filteredSurahs.map((surah) => (
+            <div
+              key={surah.id}
+              className={cn(
+                "grid grid-cols-[auto_1fr_auto] items-center py-4 px-4 cursor-pointer hover:bg-muted/5 transition-colors",
+                surah.id === 7 && "border-l-4 border-red-500"
+              )}
+              onClick={() => onSurahSelect(surah.id)}
+            >
+              {/* Left number */}
+              <div className="w-8 text-center font-medium">{surah.id}</div>
+
+              {/* Center content with surah name and verse count */}
+              <div className="flex justify-start relative">
+                <h3 className="font-surah-names text-2xl leading-tight text-center">
                   {surah.name_arabic}
                 </h3>
+
+                {/* Verse count positioned to the right of surah name */}
+                <div className="absolute left-0 -top-2 flex flex-col items-end">
+                  <span className="text-xs text-muted-foreground">آياتها</span>
+                  <span className="text-sm font-medium">
+                    {surah.ayahs.length}
+                  </span>
+                </div>
               </div>
-              <Badge
-                variant="outline"
-                className="h-8 w-8 rounded-full flex items-center justify-center text-primary font-medium"
-              >
-                {surah.id}
-              </Badge>
             </div>
-            <CardContent className="py-3 px-4 text-sm text-muted-foreground bg-accent/5">
-              <div className="flex justify-end">
-                <span className="text-xs">{surah.ayahs.length} آية</span>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+          ))}
+        </div>
       </div>
 
       {/* No results message */}
       {filteredSurahs.length === 0 && (
-        <div className="text-center py-8">
+        <div className="text-center py-8 border rounded-lg">
           <p className="text-muted-foreground">
             لم يتم العثور على نتائج لـ &quot;{searchQuery}&quot;
           </p>

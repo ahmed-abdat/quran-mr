@@ -16,6 +16,9 @@ interface SurahViewProps {
   pageAyahs: Ayah[];
   highlightSearchText?: (text: string, query: string) => string;
   searchQuery?: string;
+  toggleUIVisibility: () => void;
+  isUIVisible: boolean;
+  darkMode: boolean;
 }
 
 /**
@@ -32,6 +35,9 @@ export function SurahView({
   pageAyahs,
   highlightSearchText,
   searchQuery = "",
+  toggleUIVisibility,
+  isUIVisible,
+  darkMode,
 }: SurahViewProps) {
   // Always use all ayahs in continuous mode
   const displayAyahs = surah.ayahs;
@@ -59,13 +65,19 @@ export function SurahView({
     };
   }, [activeAyahId]);
 
-  // Check if Bismillah should be shown (shown for all surahs except Surah 1 and Surah 9)
-  const showBismillah = surah.id !== 1 && surah.id !== 9;
+  // Check if Bismillah should be shown (shown for all surahs except Surah 9)
+  const showBismillah = surah.id !== 9;
 
   return (
     <div className="space-y-4">
-      {/* Surah header - small and compact */}
-      <Card className="border-0 bg-transparent mb-2">
+      {/* Surah header as an overlay that doesn't affect layout */}
+      <Card
+        className={cn(
+          "border-0 bg-transparent fixed top-0 left-0 right-0 z-10 py-2 transition-transform duration-300 backdrop-blur-sm",
+          darkMode ? "bg-black/90 text-white" : "bg-white/90 text-black",
+          !isUIVisible && "translate-y-[-100%]" // Hide by translating up when not visible
+        )}
+      >
         <div className="p-2 text-center">
           <h1 className="text-2xl font-surah-names mb-0">
             {surah.name_arabic}
@@ -74,9 +86,9 @@ export function SurahView({
       </Card>
 
       {/* Continuous view */}
-      <div className="quran-mushaf">
+      <div className="quran-mushaf" onClick={toggleUIVisibility}>
         <div
-          className="mushaf-text font-arabic p-2"
+          className="mushaf-text font-arabic p-2 min-h-screen"
           dir="rtl"
           style={{ fontSize: `${fontSize}px` }}
         >
