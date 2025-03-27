@@ -9,6 +9,7 @@ export default function Home() {
   redirect("/quran");
 }
 
+
 // export default function Home() {
 //   return (
 //     <main className="relative min-h-screen w-full overflow-hidden">
