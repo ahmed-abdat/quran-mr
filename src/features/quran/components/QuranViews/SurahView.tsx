@@ -84,22 +84,11 @@ export function SurahView({
         </div>
       </Card>
 
-      {/* Mushaf view (traditional style) */}
-      {viewMode === "mushaf" && (
-        <MushafView
-          surah={surah}
-          ayahs={displayAyahs}
-          activeAyahId={activeAyahId}
-          fontSize={fontSize}
-          onAyahClick={onAyahClick}
-          highlightSearchText={highlightSearchText}
-          searchQuery={searchQuery}
-        />
-      )}
+
 
       {/* Continuous view mode */}
       {viewMode === "continuous" && (
-        <div className="p-6 bg-background rounded-lg border shadow-sm">
+        <div className="p-0 bg-background w-full">
           <p
             className="font-arabic leading-relaxed text-justify"
             dir="rtl"
@@ -177,41 +166,7 @@ export function SurahView({
         </div>
       )}
 
-      {/* Grid view mode */}
-      {viewMode === "grid" && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {displayAyahs.map((ayah) => (
-            <Card
-              key={ayah.id}
-              id={`ayah-${ayah.aya_no}`}
-              className={cn(
-                "overflow-hidden transition-all cursor-pointer",
-                activeAyahId === ayah.aya_no ? "ring-2 ring-primary" : ""
-              )}
-              onClick={() => onAyahClick(ayah.aya_no)}
-            >
-              <div className="p-3 bg-muted/30 border-b flex justify-between items-center">
-                <Badge variant="outline">{ayah.aya_no}</Badge>
-                <Button variant="ghost" size="icon" className="h-7 w-7">
-                  <Bookmark className="h-3 w-3" />
-                </Button>
-              </div>
-              <CardContent className="p-3">
-                <p
-                  className="text-right font-arabic leading-relaxed"
-                  dir="rtl"
-                  style={{ fontSize: `${Math.max(fontSize - 6, 16)}px` }}
-                  dangerouslySetInnerHTML={{
-                    __html: highlightSearchText
-                      ? highlightSearchText(ayah.aya_text, searchQuery)
-                      : ayah.aya_text,
-                  }}
-                />
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
+
     </div>
   );
 }

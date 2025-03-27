@@ -1,11 +1,12 @@
 "use client";
 
 import { Ayah } from "../../types/quran-types";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Search, Book, X, Trash2, XCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface SearchViewProps {
   searchQuery: string;
@@ -16,9 +17,8 @@ interface SearchViewProps {
   performSearch: (query: string) => void;
   clearSearch: () => void;
   clearRecentSearches: () => void;
+  removeSearchTerm: (term: string) => void;
   highlightSearchText: (text: string, query: string) => string;
-  navigateToSurah: (surahId: number) => void;
-  navigateToAyah: (surahId: number, ayahId: number) => void;
 }
 
 /**
@@ -34,19 +34,29 @@ export function SearchView({
   performSearch,
   clearSearch,
   clearRecentSearches,
+  removeSearchTerm,
   highlightSearchText,
-  navigateToSurah,
-  navigateToAyah,
 }: SearchViewProps) {
+  const router = useRouter();
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
       performSearch(searchQuery);
     }
   };
 
+  const navigateToAyah = (surahId: number, ayahId: number) => {
+    router.push(`/quran/${surahId}?ayah=${ayahId}`);
+  };
+
+  const navigateToSurah = (surahId: number) => {
+    router.push(`/quran/${surahId}`);
+  };
+
   return (
-    <div className="space-y-6">
-      <Card className="p-4 border-primary/20 shadow-md rounded-lg">
+    <div className="space-y-6 w-full">
+      {/* Search section */}
+      <div className="bg-card border rounded-lg p-4 shadow-sm">
         <div className="flex flex-col gap-3">
           <div className="flex flex-row-reverse gap-2">
             <Button
@@ -125,27 +135,7 @@ export function SearchView({
                       className="h-4 w-4 rounded-full flex items-center justify-center text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                       onClick={(e) => {
                         e.stopPropagation();
-                        const newSearches = recentSearches.filter(
-                          (_, i) => i !== index
-                        );
-                        localStorage.setItem(
-                          "quranRecentSearches",
-                          JSON.stringify(newSearches)
-                        );
-                        // Re-initialize the search state with updated list
-                        if (newSearches.length === 0) {
-                          clearRecentSearches();
-                        } else {
-                          // This is a bit of a hack - we clear and reset since we don't have a setter function
-                          clearRecentSearches();
-                          setTimeout(() => {
-                            localStorage.setItem(
-                              "quranRecentSearches",
-                              JSON.stringify(newSearches)
-                            );
-                            window.location.reload();
-                          }, 10);
-                        }
+                        removeSearchTerm(query);
                       }}
                       aria-label="إزالة"
                     >
@@ -157,11 +147,11 @@ export function SearchView({
             </div>
           )}
         </div>
-      </Card>
+      </div>
 
       {/* Results section */}
       {isSearching ? (
-        <div className="text-center py-12 bg-muted/5 rounded-lg border border-border/30 shadow-sm">
+        <div className="text-center py-12 bg-card/50 rounded-lg border shadow-sm">
           <div className="h-10 w-10 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4 opacity-70" />
           <p className="text-muted-foreground">
             جاري البحث في القرآن الكريم...
@@ -177,11 +167,11 @@ export function SearchView({
               </Badge>
             </h2>
           </div>
-          <div className="space-y-4">
+          <div className="grid gap-4 grid-cols-1">
             {searchResults.map((ayah) => (
-              <Card
+              <div
                 key={ayah.id}
-                className="overflow-hidden transition-all hover:shadow-md group border-primary/10"
+                className="bg-card border rounded-lg overflow-hidden transition-all hover:shadow-md group"
               >
                 <div className="bg-muted/30 p-3 flex justify-between items-center border-b">
                   <div className="flex items-center gap-2">
@@ -218,12 +208,12 @@ export function SearchView({
                     }}
                   />
                 </div>
-              </Card>
+              </div>
             ))}
           </div>
         </div>
       ) : searchQuery && !isSearching ? (
-        <Card className="text-center py-12 border-dashed bg-muted/5">
+        <div className="text-center py-12 bg-card/50 rounded-lg border border-dashed">
           <Search className="h-16 w-16 mx-auto mb-4 text-muted-foreground opacity-20" />
           <p className="text-xl text-muted-foreground mb-2">
             لم يتم العثور على نتائج
@@ -240,9 +230,9 @@ export function SearchView({
           >
             مسح البحث
           </Button>
-        </Card>
+        </div>
       ) : (
-        <Card className="text-center py-16 border-dashed bg-muted/5">
+        <div className="text-center py-16 bg-card/50 rounded-lg border border-dashed">
           <Search className="h-16 w-16 mx-auto mb-4 text-muted-foreground opacity-20" />
           <p className="text-xl text-muted-foreground mb-2">
             ابحث في القرآن الكريم
@@ -250,7 +240,7 @@ export function SearchView({
           <p className="text-muted-foreground max-w-md mx-auto">
             اكتب كلمة أو عبارة للبحث عنها في القرآن الكريم
           </p>
-        </Card>
+        </div>
       )}
     </div>
   );

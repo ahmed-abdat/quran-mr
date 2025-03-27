@@ -85,6 +85,29 @@ export function useQuranSearch() {
     }
   }, []);
 
+  // Remove a specific search term
+  const removeSearchTerm = useCallback(
+    (termToRemove: string) => {
+      const updatedSearches = recentSearches.filter(
+        (term) => term !== termToRemove
+      );
+      setRecentSearches(updatedSearches);
+      try {
+        if (updatedSearches.length === 0) {
+          localStorage.removeItem("quranRecentSearches");
+        } else {
+          localStorage.setItem(
+            "quranRecentSearches",
+            JSON.stringify(updatedSearches)
+          );
+        }
+      } catch (e) {
+        console.error("Failed to update recent searches", e);
+      }
+    },
+    [recentSearches]
+  );
+
   // Highlight text that matches the search query
   const highlightSearchText = (text: string, query: string) => {
     if (!query.trim()) return text;
@@ -112,6 +135,7 @@ export function useQuranSearch() {
     performSearch,
     clearSearch,
     clearRecentSearches,
+    removeSearchTerm,
     highlightSearchText,
   };
 }

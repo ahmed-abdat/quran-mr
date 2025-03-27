@@ -78,6 +78,7 @@ export function QuranContainer({
     clearSearch,
     clearRecentSearches,
     highlightSearchText,
+    removeSearchTerm,
   } = useQuranSearch();
 
   // Current surah data
@@ -158,9 +159,8 @@ export function QuranContainer({
             performSearch={performSearch}
             clearSearch={clearSearch}
             clearRecentSearches={clearRecentSearches}
+            removeSearchTerm={removeSearchTerm}
             highlightSearchText={highlightSearchText}
-            navigateToSurah={navigateToSurah}
-            navigateToAyah={handleSearchResultClick}
           />
         )}
 

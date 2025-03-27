@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useTheme } from "@/components/ThemeProvider";
 
 // Available view modes for the Quran
-export type QuranViewMode = "continuous" | "page" | "grid" | "mushaf";
+export type QuranViewMode = "continuous" | "page";
 
 /**
  * Custom hook for managing Quran display settings
@@ -15,16 +15,9 @@ export function useQuranSettings() {
   const [currentPage, setCurrentPage] = useState(1);
   const [showTranslation, setShowTranslation] = useState(false);
 
-  // Number of ayahs to show per page (varies by view mode)
+  // Number of ayahs to show per page (now always shows all)
   const getItemsPerPage = () => {
-    switch (viewMode) {
-      case "mushaf":
-        return 15; // Show more ayahs in mushaf mode
-      case "page":
-        return 10;
-      default:
-        return 999; // Show all in continuous or grid mode
-    }
+    return 999; // Show all ayahs in both modes
   };
 
   // Load font size from localStorage
@@ -102,9 +95,6 @@ export function useQuranSettings() {
   // Handle view mode change
   const changeViewMode = (mode: QuranViewMode) => {
     setViewMode(mode);
-    if (mode === "page" || mode === "mushaf") {
-      setCurrentPage(1);
-    }
   };
 
   // Toggle translation
