@@ -2,7 +2,14 @@ import { useState, useEffect } from "react";
 import { useTheme } from "@/components/ThemeProvider";
 
 // Available view modes for the Quran
-export type QuranViewMode = "continuous" | "page";
+export type QuranViewMode = "continuous";
+
+// Available font options for the Quran
+export enum QuranFont {
+  UTHMANIC_WARSH = "uthmanic_warsh",
+  UTHMANIC_HAFS = "uthmanic_hafs",
+  SURAH_NAMES = "surah_names",
+}
 
 /**
  * Custom hook for managing Quran display settings
@@ -10,14 +17,16 @@ export type QuranViewMode = "continuous" | "page";
  */
 export function useQuranSettings() {
   const { theme, setTheme } = useTheme();
-  const [fontSize, setFontSize] = useState(28);
-  const [viewMode, setViewMode] = useState<QuranViewMode>("continuous");
+  const [fontSize, setFontSize] = useState(24);
+  const [viewMode] = useState<QuranViewMode>("continuous");
   const [currentPage, setCurrentPage] = useState(1);
   const [showTranslation, setShowTranslation] = useState(false);
+  // Always use Warsh font by default
+  const fontType = QuranFont.UTHMANIC_WARSH;
 
   // Number of ayahs to show per page (now always shows all)
   const getItemsPerPage = () => {
-    return 999; // Show all ayahs in both modes
+    return 999; // Show all ayahs
   };
 
   // Load font size from localStorage
@@ -25,18 +34,10 @@ export function useQuranSettings() {
     try {
       // Load settings from localStorage
       const savedFontSize = localStorage.getItem("quranFontSize");
-      const savedViewMode = localStorage.getItem("quranViewMode");
       const savedShowTranslation = localStorage.getItem("quranShowTranslation");
 
       if (savedFontSize) {
         setFontSize(parseInt(savedFontSize));
-      }
-
-      if (
-        savedViewMode &&
-        ["continuous", "page", "grid", "mushaf"].includes(savedViewMode)
-      ) {
-        setViewMode(savedViewMode as QuranViewMode);
       }
 
       if (savedShowTranslation) {
@@ -55,15 +56,6 @@ export function useQuranSettings() {
       console.error("Failed to save font size", e);
     }
   }, [fontSize]);
-
-  // Save view mode to localStorage when changed
-  useEffect(() => {
-    try {
-      localStorage.setItem("quranViewMode", viewMode);
-    } catch (e) {
-      console.error("Failed to save view mode", e);
-    }
-  }, [viewMode]);
 
   // Save translation preference to localStorage when changed
   useEffect(() => {
@@ -92,11 +84,6 @@ export function useQuranSettings() {
     setTheme(theme === "dark" ? "light" : "dark");
   };
 
-  // Handle view mode change
-  const changeViewMode = (mode: QuranViewMode) => {
-    setViewMode(mode);
-  };
-
   // Toggle translation
   const toggleTranslation = () => {
     setShowTranslation(!showTranslation);
@@ -110,8 +97,6 @@ export function useQuranSettings() {
     getItemsPerPage,
     increaseFontSize,
     decreaseFontSize,
-    changeViewMode,
-    setViewMode,
     setCurrentPage,
     toggleTheme,
     toggleTranslation,

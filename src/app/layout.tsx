@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { uthmanicFont } from "./font/fonts";
+import { uthmanicFont, uthmanicHafsFont, surahNamesFont } from "./font/fonts";
 import { GlobalProviders } from "@/components/providers/globa-provider";
 
 export const metadata: Metadata = {
@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl" suppressHydrationWarning>
       <body
-        className={`${uthmanicFont.variable} antialiased`}
+        className={`${uthmanicFont.variable} ${uthmanicHafsFont.variable} ${surahNamesFont.variable} antialiased`}
         suppressHydrationWarning
       >
         <GlobalProviders>{children}</GlobalProviders>

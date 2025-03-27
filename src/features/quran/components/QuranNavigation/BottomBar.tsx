@@ -3,14 +3,12 @@
 import { Button } from "@/components/ui/button";
 import {
   TextSelect,
-  ChevronLeft,
-  ChevronRight,
   MinusCircle,
   PlusCircle,
   ArrowLeft,
   ArrowRight,
 } from "lucide-react";
-import { QuranViewMode } from "../../hooks/useQuranSettings";
+import { QuranViewMode, QuranFont } from "../../hooks/useQuranSettings";
 
 interface BottomBarProps {
   viewMode: QuranViewMode;
@@ -28,7 +26,7 @@ interface BottomBarProps {
 
 /**
  * BottomBar component
- * Displays controls for pagination, font size, and surah navigation
+ * Displays controls for font size and surah navigation
  */
 export function BottomBar({
   viewMode,
@@ -76,7 +74,7 @@ export function BottomBar({
           </Button>
         </div>
 
-        {/* Pagination controls and Surah navigation */}
+        {/* Surah navigation */}
         <div className="flex items-center">
           {/* Previous Surah button */}
           <Button
@@ -89,39 +87,6 @@ export function BottomBar({
           >
             <ArrowRight className="h-4 w-4" />
           </Button>
-
-          {/* Page navigation - only shown for page view mode */}
-          {viewMode === "page" && (
-            <>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => onPageChange(currentPage - 1)}
-                disabled={currentPage <= 1}
-                aria-label="الصفحة السابقة"
-                className="transition-all hover:bg-secondary/20"
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-
-              <div className="mx-2 text-sm">
-                <span className="font-semibold">{currentPage}</span>
-                <span className="text-muted-foreground mx-1">من</span>
-                <span className="font-semibold">{totalPages}</span>
-              </div>
-
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => onPageChange(currentPage + 1)}
-                disabled={currentPage >= totalPages}
-                aria-label="الصفحة التالية"
-                className="transition-all hover:bg-secondary/20"
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-            </>
-          )}
 
           {/* Next Surah button */}
           <Button

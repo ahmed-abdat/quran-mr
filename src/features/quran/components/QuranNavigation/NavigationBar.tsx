@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { BookOpen, Home, List, Moon, Search, Sun } from "lucide-react";
+import { Home, Moon, Search, Sun } from "lucide-react";
 import { Surah } from "../../types/quran-types";
 import { QuranViewMode } from "../../hooks/useQuranSettings";
 
@@ -26,7 +26,6 @@ interface NavigationBarProps {
   navigateToNextSurah: () => void;
   viewMode: QuranViewMode;
   darkMode: boolean;
-  onViewModeChange: (mode: QuranViewMode) => void;
   onToggleTheme: () => void;
 }
 
@@ -44,7 +43,6 @@ export function NavigationBar({
   navigateToSurah,
   viewMode,
   darkMode,
-  onViewModeChange,
   onToggleTheme,
 }: NavigationBarProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -93,40 +91,6 @@ export function NavigationBar({
         </div>
 
         <div className="flex items-center">
-          {/* Only show view mode buttons when a surah is selected */}
-          {currentSurahId && (
-            <div className="flex items-center border-r border-l border-border/30 px-2">
-              {/* View mode buttons - reduced to two options */}
-              <Button
-                variant={viewMode === "continuous" ? "secondary" : "ghost"}
-                size="icon"
-                onClick={() => onViewModeChange("continuous")}
-                aria-label="عرض متواصل"
-                className={
-                  viewMode !== "continuous"
-                    ? "transition-all hover:bg-secondary/20"
-                    : ""
-                }
-              >
-                <List className="h-4 w-4" />
-              </Button>
-
-              <Button
-                variant={viewMode === "page" ? "secondary" : "ghost"}
-                size="icon"
-                onClick={() => onViewModeChange("page")}
-                aria-label="عرض الصفحات"
-                className={
-                  viewMode !== "page"
-                    ? "transition-all hover:bg-secondary/20"
-                    : ""
-                }
-              >
-                <BookOpen className="h-4 w-4" />
-              </Button>
-            </div>
-          )}
-
           {/* Other actions */}
           <div className="flex items-center">
             <Button

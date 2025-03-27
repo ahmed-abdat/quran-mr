@@ -29,7 +29,7 @@ export function SurahListView({ surahs, onSurahSelect }: SurahListViewProps) {
   return (
     <div className="space-y-6">
       {/* Search box */}
-      <Card className="p-3 shadow-sm">
+      <Card className="p-3 border">
         <div className="relative">
           <Input
             placeholder="البحث عن سورة..."
@@ -42,21 +42,29 @@ export function SurahListView({ surahs, onSurahSelect }: SurahListViewProps) {
       </Card>
 
       {/* Surah grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
         {filteredSurahs.map((surah) => (
           <Card
             key={surah.id}
-            className="overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
+            className="overflow-hidden cursor-pointer hover:bg-muted/20 transition-colors border"
             onClick={() => onSurahSelect(surah.id)}
           >
-            <div className="flex items-center justify-between p-4 border-b bg-muted/30">
-              <span className="font-medium">{surah.name_arabic}</span>
-              <Badge variant="outline">{surah.id}</Badge>
+            <div className="flex items-center justify-between p-4 border-b">
+              <div className="flex-1 text-right">
+                <h3 className="font-surah-names text-2xl leading-tight">
+                  {surah.name_arabic}
+                </h3>
+              </div>
+              <Badge
+                variant="outline"
+                className="h-8 w-8 rounded-full flex items-center justify-center text-primary font-medium"
+              >
+                {surah.id}
+              </Badge>
             </div>
-            <CardContent className="py-3 px-4 text-sm text-muted-foreground">
-              <div className="flex justify-between">
-                <span>{surah.ayahs.length} آية</span>
-                {/* We could add more metadata here like Meccan/Medinan */}
+            <CardContent className="py-3 px-4 text-sm text-muted-foreground bg-accent/5">
+              <div className="flex justify-end">
+                <span className="text-xs">{surah.ayahs.length} آية</span>
               </div>
             </CardContent>
           </Card>

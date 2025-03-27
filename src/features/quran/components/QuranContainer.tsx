@@ -11,6 +11,7 @@ import { useQuranData } from "../hooks/useQuranData";
 import { useQuranNavigation } from "../hooks/useQuranNavigation";
 import { useQuranSettings } from "../hooks/useQuranSettings";
 import { useQuranSearch } from "../hooks/useQuranSearch";
+import { Ayah } from "../types/quran-types";
 
 interface QuranContainerProps {
   initialView?: "surah-list" | "surah" | "search";
@@ -58,14 +59,11 @@ export function QuranContainer({
     fontSize,
     viewMode,
     currentPage,
-    showTranslation,
     getItemsPerPage,
     increaseFontSize,
     decreaseFontSize,
     toggleTheme,
-    setViewMode,
     setCurrentPage,
-    toggleTranslation,
   } = useQuranSettings();
 
   const {
@@ -84,31 +82,15 @@ export function QuranContainer({
   // Current surah data
   const currentSurah = activeSurahId ? getSurah(activeSurahId) : null;
 
-  // Prepare data for the current view mode
+  // Default pagination values (not used in continuous mode)
   const itemsPerPage = getItemsPerPage();
   const totalAyahs = currentSurah?.ayahs.length || 0;
   const totalPages = Math.ceil(totalAyahs / itemsPerPage);
-
-  // Calculate the ayahs to display on the current page
-  const pageAyahs = currentSurah
-    ? getPaginatedAyahs(currentSurah, currentPage, itemsPerPage)
-    : [];
+  const pageAyahs: Ayah[] = [];
 
   // Navigation availability
   const hasPrevSurah = activeSurahId ? activeSurahId > 1 : false;
   const hasNextSurah = activeSurahId ? activeSurahId < 114 : false;
-
-  // If changing surahs, reset to page 1
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [activeSurahId, setCurrentPage]);
-
-  // Handle ayah click
-  const handleAyahClick = (ayahId: number) => {
-    if (activeSurahId) {
-      navigateToAyah(activeSurahId, ayahId);
-    }
-  };
 
   // Handle search result navigation
   const handleSearchResultClick = (surahId: number, ayahId: number) => {
@@ -140,11 +122,10 @@ export function QuranContainer({
         navigateToNextSurah={navigateToNextSurah}
         viewMode={viewMode}
         darkMode={isDarkMode}
-        onViewModeChange={setViewMode}
         onToggleTheme={toggleTheme}
       />
 
-      <main className="flex-1 container mx-auto py-6 px-4">
+      <main className="flex-1 container mx-auto p-4">
         {activeView === "surah-list" && (
           <SurahListView surahs={allSurahs} onSurahSelect={navigateToSurah} />
         )}
@@ -173,7 +154,6 @@ export function QuranContainer({
             currentPage={currentPage}
             totalPages={totalPages}
             pageAyahs={pageAyahs}
-            onAyahClick={handleAyahClick}
             highlightSearchText={highlightSearchText}
             searchQuery={searchQuery}
           />
