@@ -19,8 +19,8 @@ export function SurahList({ surahs }: SurahListProps) {
   // Filter surahs based on search query
   const filteredSurahs = surahs.filter(
     (surah) =>
-      surah.name_ar.includes(searchQuery) ||
-      surah.number.toString().includes(searchQuery)
+      surah.name_arabic.includes(searchQuery) ||
+      surah.id.toString().includes(searchQuery)
   );
 
   const toggleTheme = () => {
@@ -55,15 +55,11 @@ export function SurahList({ surahs }: SurahListProps) {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredSurahs.map((surah) => (
-          <Link
-            key={surah.number}
-            href={`/quran/${surah.number}`}
-            className="block"
-          >
+          <Link key={surah.id} href={`/quran/${surah.id}`} className="block">
             <div className="bg-card border rounded-lg p-4 transition-all hover:bg-accent hover:text-accent-foreground hover:scale-[1.02] shadow-sm hover:shadow-md">
               <div className="flex justify-between items-center">
                 <div className="text-right">
-                  <p className="text-2xl font-arabic">{surah.name_ar}</p>
+                  <p className="text-2xl font-arabic">{surah.name_arabic}</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <div>
@@ -72,7 +68,7 @@ export function SurahList({ surahs }: SurahListProps) {
                     </p>
                   </div>
                   <div className="h-10 w-10 rounded-full flex items-center justify-center bg-primary text-primary-foreground shadow-sm">
-                    {surah.number}
+                    {surah.id}
                   </div>
                 </div>
               </div>

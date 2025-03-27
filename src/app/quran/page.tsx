@@ -1,27 +1,11 @@
-import { SurahList, getAllSurahs } from "@/features/quran";
-import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { Metadata } from "next";
+import { QuranContainer } from "@/features/quran/components/QuranContainer";
+
+export const metadata: Metadata = {
+  title: "القرآن الكريم | The Holy Quran",
+  description: "تصفح القرآن الكريم بطريقة سهلة وبسيطة",
+};
 
 export default function QuranPage() {
-  const surahs = getAllSurahs();
-
-  return (
-    <main className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <Link
-          href="/"
-          className="inline-flex items-center text-sm hover:underline"
-        >
-          <ChevronRight className="ml-1 h-4 w-4" />
-          العودة إلى الصفحة الرئيسية
-        </Link>
-        <h1 className="text-3xl font-bold mt-4">سور القرآن الكريم</h1>
-        <p className="text-muted-foreground">
-          تصفح جميع سور القرآن الكريم وعددها {surahs.length} سورة
-        </p>
-      </div>
-
-      <SurahList surahs={surahs} />
-    </main>
-  );
+  return <QuranContainer initialView="surah-list" />;
 }

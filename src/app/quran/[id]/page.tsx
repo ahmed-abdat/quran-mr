@@ -1,49 +1,54 @@
-import { SurahView, getSurahByNumber, getAllSurahs } from "@/features/quran";
-import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { Metadata } from "next";
+import { QuranContainer } from "@/features/quran/components/QuranContainer";
+import { getAllSurahs } from "@/features/quran/utils/quran-data";
 import { notFound } from "next/navigation";
 
-type Params = Promise<{ id: string }>;  
+type Params = Promise<{ id: string }>
+type SearchParams = Promise<{ ayah?: string }>
 
 interface SurahPageProps {
   params: Params;
+  searchParams: SearchParams;
 }
 
-export function generateStaticParams() {
+export async function generateMetadata({
+  params,
+  searchParams,
+}: SurahPageProps): Promise<Metadata> {
   const surahs = getAllSurahs();
-  return surahs.map((surah) => ({
-    id: surah.number.toString(),
-  }));
-}
-
-export default async function SurahPage({ params }: SurahPageProps) {
   const { id } = await params;
+  const { ayah } = await searchParams;
   const surahId = parseInt(id);
-  const surah = getSurahByNumber(surahId);
+  const surah = surahs.find((s) => s.id === surahId);
 
   if (!surah) {
-    notFound();
+    return {
+      title: "سورة غير موجودة | Surah Not Found",
+    };
   }
 
-  const surahs = getAllSurahs();
-  const surahIndex = surahs.findIndex((s) => s.number === surahId);
-  const prevSurah = surahIndex > 0 ? surahs[surahIndex - 1].number : undefined;
-  const nextSurah =
-    surahIndex < surahs.length - 1 ? surahs[surahIndex + 1].number : undefined;
+  return {
+    title: `سورة ${surah.name_arabic} | ${surah.name_english}`,
+    description: `قراءة سورة ${surah.name_arabic} (${surah.name_english}) - ${surah.verses_count} آية`,
+  };
+}
+
+export default async function SurahPage({ params, searchParams }: SurahPageProps) {
+  const { id } = await params;
+  const { ayah } = await searchParams;
+  const surahId = parseInt(id);
+  const ayahId = ayah ? parseInt(ayah) : undefined;
+
+  // Validate surah ID
+  if (isNaN(surahId) || surahId < 1 || surahId > 114) {
+    return notFound();
+  }
 
   return (
-    <main className="container mx-auto px-4 py-4 max-w-5xl">
-      <div className="mb-4">
-        <Link
-          href="/quran"
-          className="inline-flex items-center text-sm hover:underline"
-        >
-          <ChevronRight className="ml-1 h-4 w-4" />
-          العودة إلى قائمة السور
-        </Link>
-      </div>
-
-      <SurahView surah={surah} nextSurah={nextSurah} prevSurah={prevSurah} />
-    </main>
+    <QuranContainer
+      initialView="surah"
+      initialSurahId={surahId}
+      initialAyahId={ayahId}
+    />
   );
 }

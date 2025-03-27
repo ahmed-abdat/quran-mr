@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { uthmanicFont } from "./font/fonts";
-import { ThemeProvider } from "@/components/ThemeProvider";
-
-const inter = Inter({ subsets: ["latin"] });
+import { GlobalProviders } from "@/components/providers/globa-provider";
 
 export const metadata: Metadata = {
   title: "تطبيق القرآن",
@@ -19,10 +17,10 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl" suppressHydrationWarning>
       <body
-        className={`${inter.className} ${uthmanicFont.variable} antialiased`}
+        className={`${uthmanicFont.variable} antialiased`}
         suppressHydrationWarning
       >
-        <ThemeProvider>{children}</ThemeProvider>
+        <GlobalProviders>{children}</GlobalProviders>
       </body>
     </html>
   );

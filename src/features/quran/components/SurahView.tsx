@@ -16,12 +16,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/ThemeProvider";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 interface SurahViewProps {
   surah: Surah;
@@ -88,7 +82,7 @@ export function SurahView({ surah, nextSurah, prevSurah }: SurahViewProps) {
   // Reset to page 1 when surah changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [surah.number]);
+  }, [surah.id]);
 
   return (
     <div className="w-full max-w-4xl mx-auto pb-20">
@@ -97,7 +91,7 @@ export function SurahView({ surah, nextSurah, prevSurah }: SurahViewProps) {
         <div className="flex items-center justify-between pb-4">
           <div className="flex items-center gap-3">
             <h1 className="text-2xl md:text-3xl font-arabic font-semibold">
-              {surah.name_ar}
+              {surah.name_arabic}
             </h1>
             <span className="px-2.5 py-0.5 text-xs rounded-full bg-primary/10">
               {surah.ayahs.length} آية
