@@ -19,7 +19,7 @@ export function QuranContainer({
   initialAyahId,
 }: QuranContainerProps) {
   const quranStore = useQuranStore();
-  const { allSurahs, allJuzs, isLoading, error } = useQuranData();
+  const { allSurahs, allJuzs } = useQuranData();
   const isInitialRender = useRef(true);
   const searchParams = useSearchParams();
 
@@ -40,33 +40,6 @@ export function QuranContainer({
       isInitialRender.current = false;
     }
   }, [initialView, initialSurahId, initialAyahId, quranStore, searchParams]);
-
-  // Show loading state
-  if (isLoading) {
-    return (
-      <QuranLayout>
-        <div className="flex items-center justify-center h-[70vh]">
-          <p className="text-lg">جاري التحميل...</p>
-        </div>
-      </QuranLayout>
-    );
-  }
-
-  // Show error state
-  if (error) {
-    return (
-      <QuranLayout>
-        <div className="flex items-center justify-center h-[70vh] text-center">
-          <div>
-            <p className="text-lg text-red-500">حدث خطأ أثناء تحميل البيانات</p>
-            <p className="text-sm text-muted-foreground mt-2">
-              {error.message}
-            </p>
-          </div>
-        </div>
-      </QuranLayout>
-    );
-  }
 
   return (
     <QuranLayout>
