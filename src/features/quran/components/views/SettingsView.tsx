@@ -115,7 +115,7 @@ export function SettingsView() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="max-w-2xl mx-auto space-y-6 pb-6">
       {/* Page Title */}
       <div className="text-center mb-2">
         <h1 className="text-2xl font-semibold text-primary">الإعدادات</h1>
@@ -217,9 +217,9 @@ export function SettingsView() {
         </div>
       </div>
 
-      {/* Action buttons */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-lg border-t">
-        <div className="max-w-2xl mx-auto flex flex-col gap-2">
+      {/* Action buttons - Now part of normal flow */}
+      <div className="bg-background/80 backdrop-blur-lg border-t py-4">
+        <div className="max-w-2xl mx-auto flex flex-col gap-2 px-4">
           <Button
             onClick={handleSave}
             className="w-full"
@@ -252,9 +252,6 @@ export function SettingsView() {
           </Button>
         </div>
       </div>
-
-      {/* Safe area for fixed buttons */}
-      <div className="h-32" />
     </div>
   );
 }
