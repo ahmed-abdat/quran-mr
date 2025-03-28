@@ -96,8 +96,8 @@ See our [Contributing Guide](CONTRIBUTING.md) for detailed instructions.
 
 ## 💬 Need Help?
 
-- Create an [Issue](https://github.com/ahmed-abdat/quran-mr/issues) for bugs
-- Contact us on [WhatsApp](https://wa.me/22242049074) for questions and support
+- Create an <a href="https://github.com/ahmed-abdat/quran-mr/issues" target="_blank" rel="noopener noreferrer">Issue</a> for bugs
+- <a href="https://wa.me/22242049074" target="_blank" rel="noopener noreferrer">Contact us on WhatsApp</a> for questions and support
 - Connect with the community to learn and share
 
 ## 📝 License
@@ -110,6 +110,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Built with ❤️ for the Muslim community worldwide.
 
-[Live Demo](https://qurane-mr.vercel.app/) | [Report Bug](https://github.com/ahmed-abdat/quran-mr/issues) | [Contact on WhatsApp](https://wa.me/22242049074)
+<a href="https://qurane-mr.vercel.app/" target="_blank" rel="noopener noreferrer">Live Demo</a> | <a href="https://github.com/ahmed-abdat/quran-mr/issues" target="_blank" rel="noopener noreferrer">Report Bug</a> | <a href="https://wa.me/22242049074" target="_blank" rel="noopener noreferrer">Contact on WhatsApp</a>
 
 </div>

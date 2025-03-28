@@ -3,7 +3,6 @@
 import * as React from "react";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 
@@ -19,15 +18,6 @@ export function ThemeToggle() {
   const handleThemeChange = () => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
-    toast.success(
-      newTheme === "light" ? "تم تفعيل الوضع النهاري" : "تم تفعيل الوضع الليلي",
-      {
-        description:
-          newTheme === "light"
-            ? "تم تغيير المظهر إلى الوضع النهاري"
-            : "تم تغيير المظهر إلى الوضع الليلي",
-      }
-    );
   };
 
   // Prevent hydration mismatch by not rendering anything until mounted

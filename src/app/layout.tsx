@@ -25,7 +25,7 @@ export default function RootLayout({
           <Toaster 
             position="top-center"
             duration={2000}
-            richColors
+            // richColors
           />
           {children}
         </GlobalProviders>
