@@ -1,14 +1,14 @@
-# Contributing to تطبيق القرآن الكريم | Quran App
+# Contributing to تطبيق القرآن الكريم | Quran MR
 
-Thank you for your interest in contributing to the Quran App! This guide will help you get started with contributing to our project.
+Thank you for your interest in contributing to the Quran MR! This guide will help you get started with contributing to our project.
 
 ## 📋 Quick Start
 
 1. **Fork and Clone**
 
    ```bash
-   git clone https://github.com/ahmed-abdat/quran.git
-   cd quran
+   git clone https://github.com/ahmed-abdat/quran-mr.git
+   cd quran-mr
    ```
 
 2. **Install Dependencies**
@@ -30,9 +30,9 @@ Thank you for your interest in contributing to the Quran App! This guide will he
 
 ### 1. Find Something to Work On
 
-- Check our [Issues](https://github.com/ahmed-abdat/quran/issues)
+- Check our [Issues](https://github.com/ahmed-abdat/quran-mr/issues)
 - Look for `good first issue` labels
-- Ask questions in [Discussions](https://github.com/ahmed-abdat/quran/discussions)
+- Ask questions in [Discussions](https://github.com/ahmed-abdat/quran-mr/discussions)
 
 ### 2. Make Your Changes
 
@@ -229,10 +229,10 @@ docs: update contributing guide
 
 <div align="center">
 
-Thank you for helping make the Quran App better! ❤️
+Thank you for helping make the Quran MR better! ❤️
 
-Need help? Join our [Discussions](https://github.com/ahmed-abdat/quran/discussions)
+Need help? Join our [Discussions](https://github.com/ahmed-abdat/quran-mr/discussions)
 
-[Live Demo](https://quran-indol-pi.vercel.app/) | [Report Bug](https://github.com/ahmed-abdat/quran/issues)
+[Live Demo](https://qurane-mr.vercel.app/) | [Report Bug](https://github.com/ahmed-abdat/quran-mr/issues)
 
 </div>

@@ -1,4 +1,4 @@
-# تطبيق القرآن الكريم | Quran App
+# تطبيق القرآن الكريم | Quran MR
 
 A modern Quran web application built with Next.js, featuring a beautiful Arabic interface and Uthmanic script for an exceptional reading experience.
 
@@ -27,8 +27,8 @@ A modern Quran web application built with Next.js, featuring a beautiful Arabic 
 1. **Clone the project**
 
    ```bash
-   git clone https://github.com/ahmed-abdat/quran.git
-   cd quran
+   git clone https://github.com/ahmed-abdat/quran-mr.git
+   cd quran-mr
    ```
 
 2. **Install dependencies**
@@ -77,7 +77,7 @@ We welcome contributions! Here's how you can help:
 
 1. **Find an Issue**
 
-   - Check our [Issues](https://github.com/ahmed-abdat/quran/issues) page
+   - Check our [Issues](https://github.com/ahmed-abdat/quran-mr/issues) page
    - Look for `good first issue` labels for beginner-friendly tasks
 
 2. **Make Changes**
@@ -96,8 +96,8 @@ See our [Contributing Guide](CONTRIBUTING.md) for detailed instructions.
 
 ## 💬 Need Help?
 
-- Create an [Issue](https://github.com/ahmed-abdat/quran/issues) for bugs
-- Start a [Discussion](https://github.com/ahmed-abdat/quran/discussions) for questions
+- Create an [Issue](https://github.com/ahmed-abdat/quran-mr/issues) for bugs
+- Start a [Discussion](https://github.com/ahmed-abdat/quran-mr/discussions) for questions
 - Join our community to learn and share
 
 ## 📝 License
@@ -110,6 +110,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Built with ❤️ for the Muslim community worldwide.
 
-[Live Demo](https://quran-indol-pi.vercel.app/) | [Report Bug](https://github.com/ahmed-abdat/quran/issues) | [Request Feature](https://github.com/ahmed-abdat/quran/issues)
+[Live Demo](https://qurane-mr.vercel.app/) | [Report Bug](https://github.com/ahmed-abdat/quran-mr/issues) | [Request Feature](https://github.com/ahmed-abdat/quran-mr/issues)
 
 </div>
