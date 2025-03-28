@@ -17,9 +17,8 @@
 /build
 
 # info
-project_requirements.md
-docs/*
 .cursorrules
+.cursor/*
 
 # misc
 .DS_Store

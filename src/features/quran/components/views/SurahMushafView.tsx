@@ -1,8 +1,8 @@
 "use client";
 
 import { Surah } from "@/features/quran/types";
-import { useQuranNavigationStore } from "@/features/quran/store/useQuranNavigationStore";
-import { useQuranSettingsStore } from "@/features/quran/store/useQuranSettingsStore";
+import { useMushafNavigationStore } from "@/features/quran/store/useMushafNavigationStore";
+import { useMushafSettingsStore } from "@/features/quran/store/useMushafSettingsStore";
 import { useQuranSearchStore } from "@/features/quran/store/useQuranSearchStore";
 import { AyahRenderer } from "../ui/AyahRenderer";
 import { SurahHeader } from "../ui/SurahHeader";
@@ -10,13 +10,13 @@ import { Basmala } from "../ui/Basmala";
 import { cn } from "@/lib/utils";
 import { useEffect, useRef } from "react";
 
-export interface SurahViewProps {
+export interface SurahMushafViewProps {
   /** The surah data to display */
   surah: Surah;
 }
 
 /**
- * SurahView Component
+ * SurahMushafView Component
  *
  * Displays a complete surah with header, basmala, and ayahs.
  * Features:
@@ -28,12 +28,12 @@ export interface SurahViewProps {
  *
  * @example
  * ```tsx
- * <SurahView surah={surahData} />
+ * <SurahMushafView surah={surahData} />
  * ```
  */
-export function SurahView({ surah }: SurahViewProps) {
-  const { fontSize, displayMode } = useQuranSettingsStore();
-  const { activeView, activeAyahId } = useQuranNavigationStore();
+export function SurahMushafView({ surah }: SurahMushafViewProps) {
+  const { fontSize, displayMode } = useMushafSettingsStore();
+  const { activeView, activeAyahId } = useMushafNavigationStore();
   const { query: searchQuery, highlightText } = useQuranSearchStore();
   const ayahRefs = useRef<Map<number, HTMLElement>>(new Map());
 

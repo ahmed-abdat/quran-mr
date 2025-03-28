@@ -1,8 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useQuranNavigationStore } from "@/features/quran/store/useQuranNavigationStore";
-import { useQuranSettingsStore } from "@/features/quran/store/useQuranSettingsStore";
+import { useMushafNavigationStore } from "@/features/quran/store/useMushafNavigationStore";
+import { useMushafSettingsStore } from "@/features/quran/store/useMushafSettingsStore";
 import { useState, useEffect } from "react";
 import {
   Check,
@@ -29,9 +29,9 @@ export function SettingsView() {
     increaseFontSize,
     decreaseFontSize,
     toggleDisplayMode,
-  } = useQuranSettingsStore();
+  } = useMushafSettingsStore();
 
-  const { setActiveView } = useQuranNavigationStore();
+  const { setActiveView } = useMushafNavigationStore();
   const { theme, setTheme } = useTheme();
 
   const [savedSettings, setSavedSettings] = useState(false);

@@ -1,7 +1,7 @@
 /**
- * QuranLayout Component
+ * MushafLayout Component
  *
- * Main layout component that provides the structure for the Quran application.
+ * Main layout component that provides the structure for the Mushaf (Quran) application.
  * It manages:
  * 1. Navigation bar (top)
  * 2. Content area (middle)
@@ -17,9 +17,9 @@
  *
  * @example
  * ```tsx
- * <QuranLayout>
+ * <MushafLayout>
  *   <YourContent />
- * </QuranLayout>
+ * </MushafLayout>
  * ```
  */
 
@@ -28,11 +28,11 @@
 import { ReactNode, useEffect, useRef } from "react";
 import { NavigationBar } from "./NavigationBar";
 import { BottomBar } from "./BottomBar";
-import { useQuranNavigationStore } from "@/features/quran/store/useQuranNavigationStore";
-import { useQuranSettingsStore } from "@/features/quran/store/useQuranSettingsStore";
+import { useMushafNavigationStore } from "@/features/quran/store/useMushafNavigationStore";
+import { useMushafSettingsStore } from "@/features/quran/store/useMushafSettingsStore";
 import { cn } from "@/lib/utils";
 
-interface QuranLayoutProps {
+interface MushafLayoutProps {
   /** The content to be rendered inside the layout */
   children: ReactNode;
 }
@@ -45,9 +45,9 @@ const VIEW_TITLES: Record<string, string> = {
   settings: "الإعدادات",
 };
 
-export function QuranLayout({ children }: QuranLayoutProps) {
-  const { activeView } = useQuranNavigationStore();
-  const { isUIVisible, toggleUIVisibility } = useQuranSettingsStore();
+export function MushafLayout({ children }: MushafLayoutProps) {
+  const { activeView } = useMushafNavigationStore();
+  const { isUIVisible, toggleUIVisibility } = useMushafSettingsStore();
   const mainRef = useRef<HTMLDivElement>(null);
   const lastScrollY = useRef(0);
 

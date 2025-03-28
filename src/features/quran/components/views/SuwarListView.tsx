@@ -3,20 +3,26 @@
 import { useState, useMemo } from "react";
 import { Surah } from "@/features/quran/types";
 import { cn } from "@/lib/utils";
-import { useQuranNavigationStore } from "@/features/quran/store/useQuranNavigationStore";
+import { useMushafNavigationStore } from "@/features/quran/store/useMushafNavigationStore";
 import { SearchBar } from "../ui";
 
-interface SurahListViewProps {
+interface SuwarListViewProps {
   surahs: Surah[];
 }
 
 /**
- * SurahListView component
- * Displays a list of all surahs with search functionality
+ * SuwarListView component
+ * Displays a list of all surahs (chapters) with search functionality
+ *
+ * Features:
+ * - Search by surah name or number
+ * - Clean and organized layout
+ * - RTL support
+ * - Responsive design
  */
-export function SurahListView({ surahs }: SurahListViewProps) {
+export function SuwarListView({ surahs }: SuwarListViewProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const quranStore = useQuranNavigationStore();
+  const quranStore = useMushafNavigationStore();
 
   // Filter surahs based on search query
   const filteredSurahs = useMemo(() => {

@@ -1,8 +1,8 @@
 "use client";
 
 import { Ayah } from "@/features/quran/types";
-import { useQuranNavigationStore } from "@/features/quran/store/useQuranNavigationStore";
-import { useQuranSettingsStore } from "@/features/quran/store/useQuranSettingsStore";
+import { useMushafNavigationStore } from "@/features/quran/store/useMushafNavigationStore";
+import { useMushafSettingsStore } from "@/features/quran/store/useMushafSettingsStore";
 import { cn } from "@/lib/utils";
 
 interface AyahRendererProps {
@@ -16,8 +16,8 @@ interface AyahRendererProps {
  * and enhanced highlighting effects
  */
 export function AyahRenderer({ ayah, highlightedText }: AyahRendererProps) {
-  const { activeView } = useQuranNavigationStore();
-  const { fontSize } = useQuranSettingsStore();
+  const { activeView } = useMushafNavigationStore();
+  const { fontSize } = useMushafSettingsStore();
   const isReadingMode = activeView === "surah-view";
 
   // Handle rendering HTML content (for highlighted text in search)

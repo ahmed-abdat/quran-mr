@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import { QuranView, QuranError, isSurahId } from "../types/quran-types";
+import { QuranView, QuranError, isSurahId } from "../types";
 
-interface QuranNavigationState {
+interface MushafNavigationState {
   activeSurahId: number | undefined;
   activeAyahId: number | undefined;
   activeView: QuranView;
@@ -14,7 +14,7 @@ interface QuranNavigationState {
   navigateToAyah: (surahId: number, ayahId: number) => void;
 }
 
-export const useQuranNavigationStore = create<QuranNavigationState>()(
+export const useMushafNavigationStore = create<MushafNavigationState>()(
   (set) => ({
     // Initial state
     activeSurahId: undefined,

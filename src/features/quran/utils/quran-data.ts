@@ -1,12 +1,12 @@
 import quranData from "@/data/quran.json";
-import { Ayah, Surah, QuranData } from "@/features/quran/types";
+import { Ayah, Surah, QuranData, RawAyahData } from "@/features/quran/types";
 
 /**
  * Converts the raw Quran data into a more structured format organized by surahs
  */
 export function getStructuredQuranData(): QuranData {
-  // Type assertion as any first since we know the structure
-  const rawData = quranData as any[];
+  // Type assertion with the proper type
+  const rawData = quranData as RawAyahData[];
 
   // Group the ayahs by surah number
   const surahMap = new Map<number, Ayah[]>();
@@ -18,8 +18,17 @@ export function getStructuredQuranData(): QuranData {
       surahMap.set(suraNo, []);
     }
 
-    // Add to both the surah map and all ayahs array
-    const typedAyah = ayah as Ayah;
+    // Convert raw ayah to typed Ayah
+    const typedAyah: Ayah = {
+      id: ayah.id,
+      sura_no: ayah.sura_no,
+      sura_name_ar: ayah.sura_name_ar,
+      sura_name_en: ayah.sura_name_en,
+      page: typeof ayah.page === "string" ? parseInt(ayah.page) : ayah.page,
+      aya_no: ayah.aya_no,
+      aya_text: ayah.aya_text,
+    };
+
     surahMap.get(suraNo)?.push(typedAyah);
     allAyahs.push(typedAyah);
   });
@@ -36,9 +45,8 @@ export function getStructuredQuranData(): QuranData {
       name_arabic: firstAyah.sura_name_ar,
       name_english: firstAyah.sura_name_en,
       name_english_translation: firstAyah.sura_name_en, // Using same value for now
-      revelation_type: "Meccan", // Default, could be enhanced with actual data
       verses_count: ayahs.length,
-      page: parseInt(firstAyah.page.toString()),
+      page: firstAyah.page,
       ayahs: ayahs.sort((a, b) => a.aya_no - b.aya_no), // Sort by ayah number
     });
   });

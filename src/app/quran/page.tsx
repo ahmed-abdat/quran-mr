@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { QuranContainer } from "@/features/quran/components/containers/QuranContainer";
+import { MushafContainer } from "@/features/quran/components/containers/MushafContainer";
 
 export const metadata: Metadata = {
   title: "القرآ ن الكريم | The Holy Quran",
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function QuranPage() {
-  return <QuranContainer initialView="surah-list" />;
+  return <MushafContainer initialView="surah-list" />;
 }

@@ -16,20 +16,20 @@
  */
 
 // Containers
-export { QuranContainer } from "./components/containers/QuranContainer";
-export { QuranInitializer } from "./components/containers/QuranInitializer";
+export { MushafContainer } from "./components/containers/MushafContainer";
+export { MushafInitializer } from "./components/containers/MushafInitializer";
 
 // Routing
-export { QuranRouter } from "./components/routing/QuranRouter";
+export { MushafRouter } from "./components/routing/MushafRouter";
 
 // Layout components
-export { QuranLayout } from "./components/layouts/QuranLayout";
+export { MushafLayout } from "./components/layouts/MushafLayout";
 export { NavigationBar } from "./components/layouts/NavigationBar";
 export { BottomBar } from "./components/layouts/BottomBar";
 
 // View components
-export { SurahListView } from "./components/views/SurahListView";
-export { SurahView } from "./components/views/SurahView";
+export { SuwarListView } from "./components/views/SuwarListView";
+export { SurahMushafView } from "./components/views/SurahMushafView";
 export { SearchView } from "./components/views/SearchView";
 export { SettingsView } from "./components/views/SettingsView";
 
@@ -40,12 +40,12 @@ export { SearchBar } from "./components/ui/SearchBar";
 export { SurahHeader } from "./components/ui/SurahHeader";
 
 // Hooks
-export { useQuranData } from "./hooks/useQuranData";
-export { useQuranNavigation } from "./hooks/useQuranNavigation";
+export { useMushafData } from "./hooks/useMushafData";
+export { useMushafNavigation } from "./hooks/useMushafNavigation";
 
 // Store
-export { useQuranNavigationStore } from "./store/useQuranNavigationStore";
-export { useQuranSettingsStore } from "./store/useQuranSettingsStore";
+export { useMushafNavigationStore } from "./store/useMushafNavigationStore";
+export { useMushafSettingsStore } from "./store/useMushafSettingsStore";
 export { useQuranSearchStore } from "./store/useQuranSearchStore";
 
 // Utils

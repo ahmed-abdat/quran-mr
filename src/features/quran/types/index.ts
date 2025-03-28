@@ -1,6 +1,6 @@
 /**
- * Re-export all Quran types from quran-types.ts
- * This allows importing from '@/features/quran/types' instead of the specific file
+ * Types Index
+ * Re-exports all types from the Mushaf application
  */
 
-export * from "./quran-types";
+export * from "./mushaf-types";

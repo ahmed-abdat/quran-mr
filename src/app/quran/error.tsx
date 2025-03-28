@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
-import { QuranLayout } from "@/features/quran/components/layouts/QuranLayout";
+import { MushafLayout } from "@/features/quran/components/layouts/MushafLayout";
 
 export default function QuranError({
   error,
@@ -16,7 +16,7 @@ export default function QuranError({
   }, [error]);
 
   return (
-    <QuranLayout>
+    <MushafLayout>
       <div className="flex flex-col items-center justify-center min-h-[70vh] p-4 text-center">
         <h2 className="text-xl font-semibold mb-4">
           عذراً، حدث خطأ في تحميل القرآن
@@ -28,6 +28,6 @@ export default function QuranError({
           إعادة المحاولة
         </Button>
       </div>
-    </QuranLayout>
+    </MushafLayout>
   );
 }

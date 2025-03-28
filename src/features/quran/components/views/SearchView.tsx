@@ -1,11 +1,10 @@
 "use client";
 
-import { useQuranNavigationStore } from "@/features/quran/store/useQuranNavigationStore";
 import { useQuranSearchStore } from "@/features/quran/store/useQuranSearchStore";
 import { searchAyahs } from "@/features/quran/utils/quran-search";
 import { ChevronLeft, Search, X } from "lucide-react";
 import { useEffect, useRef } from "react";
-import { useQuranNavigation } from "@/features/quran/hooks/useQuranNavigation";
+import { useMushafNavigationStore } from "@/features/quran/store/useMushafNavigationStore";
 
 /**
  * SearchView Component
@@ -40,7 +39,7 @@ export function SearchView() {
     clearSearch,
   } = useQuranSearchStore();
 
-  const { navigateToAyah } = useQuranNavigation();
+  const { navigateToAyah } = useMushafNavigationStore();
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Auto-focus search input when component mounts

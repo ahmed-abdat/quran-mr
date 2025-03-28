@@ -1,6 +1,45 @@
-# Contributing to تطبيق القرآن الكريم | Quran MR
+<div align="center">
 
-Thank you for your interest in contributing to the Quran MR! This guide will help you get started with contributing to our project.
+**بسم الله الرحمن الرحيم**
+
+</div>
+
+# Contributing to مصحف موريتانيا | Mushaf Mauritania
+
+Thank you for your interest in contributing to Mushaf Mauritania! This guide will help you get started with contributing to our project.
+
+## 🎯 Upcoming Features & Improvements
+
+We have exciting plans to enhance the application. Here are some areas where we need your help:
+
+### 1. Progressive Web App (PWA)
+
+- Implement offline functionality
+- Add install prompts
+- Enable push notifications
+- Optimize caching strategies
+
+### 2. Desktop Layout Enhancement
+
+- Create responsive desktop layouts
+- Add keyboard shortcuts
+- Improve navigation for larger screens
+- Optimize reading experience
+
+### 3. Audio Integration
+
+- Support for multiple Qurra'a (قراء)
+- Verse-by-verse playback
+- Continuous playback mode
+- Audio quality options
+
+### 4. Additional Features
+
+- Advanced bookmarking system
+- Personal notes and annotations
+- Multi-language support
+- Social sharing capabilities
+- And much more, إن شاء الله
 
 ## 📋 Quick Start
 
@@ -229,7 +268,7 @@ docs: update contributing guide
 
 <div align="center">
 
-Thank you for helping make the Quran MR better! ❤️
+Thank you for helping make Mushaf Mauritania better! ❤️
 
 Need help? <a href="https://wa.me/22242049074" target="_blank" rel="noopener noreferrer">Contact us on WhatsApp</a>
 

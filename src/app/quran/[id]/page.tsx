@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { QuranContainer } from "@/features/quran/components/containers/QuranContainer";
+import { MushafContainer } from "@/features/quran/components/containers/MushafContainer";
 import { getAllSurahs } from "@/features/quran/utils/quran-data";
 import { notFound } from "next/navigation";
 
@@ -48,7 +48,7 @@ export default async function SurahPage({
   }
 
   return (
-    <QuranContainer
+    <MushafContainer
       initialView="surah-view"
       initialSurahId={surahId}
       initialAyahId={ayahId}

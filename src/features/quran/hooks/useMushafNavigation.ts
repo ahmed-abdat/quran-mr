@@ -1,7 +1,7 @@
 /**
- * useQuranNavigation Hook
+ * useMushafNavigation Hook
  *
- * Manages navigation within the Quran application, providing:
+ * Manages navigation within the Mushaf application, providing:
  * 1. View navigation (Surah list, Search, Settings)
  * 2. Surah navigation (Next/Previous)
  * 3. Ayah navigation with search highlighting
@@ -21,19 +21,19 @@
  *   navigateToSurah,
  *   navigateToAyah,
  *   navigateToSearch,
- * } = useQuranNavigation();
+ * } = useMushafNavigation();
  * ```
  */
 
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { useQuranData } from "./useQuranData";
-import { useQuranNavigationStore } from "../store/useQuranNavigationStore";
+import { useMushafData } from "./useMushafData";
+import { useMushafNavigationStore } from "../store/useMushafNavigationStore";
 
-export function useQuranNavigation() {
+export function useMushafNavigation() {
   const router = useRouter();
-  const { getPrevSurah, getNextSurah } = useQuranData();
-  const quranStore = useQuranNavigationStore();
+  const { getPrevSurah, getNextSurah } = useMushafData();
+  const quranStore = useMushafNavigationStore();
 
   /**
    * Navigate to a specific surah

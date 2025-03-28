@@ -1,104 +1,98 @@
 # تطبيق القرآن الكريم | Quran MR
 
-A modern Quran web application built with Next.js, featuring a beautiful Arabic interface and Uthmanic script for an exceptional reading experience.
+<div align="center">
 
-![Quran App Screenshot](/public/screenshots/quran_app.png)
+[![Contributors][contributors-shield]][contributors-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
 
-## ✨ Features
+A modern, open-source Quran web application built with love for the Muslim community. Our goal is to provide a beautiful, accessible, and feature-rich platform for reading and studying the Holy Quran.
 
-- 📖 Complete Quran text with authentic Uthmanic script
-- 🔍 Advanced search with Arabic text support
-- 📱 Responsive design that works on all devices
-- 🎯 Easy navigation and ayah highlighting
-- 🌓 Automatic dark/light mode
-- ⚡ Fast and smooth performance
-- 🌐 Modern and accessible interface
+[Explore the Demo](https://qurane-mr.vercel.app/) · [Report Bug](https://github.com/ahmed-abdat/quran-mr/issues) · [Request Feature](https://github.com/ahmed-abdat/quran-mr/issues)
 
-## 🚀 Getting Started
+</div>
 
-### Requirements
+## 🌟 Vision
 
-- Node.js 18 or later
-- npm or yarn
-- Git
+Our vision is to create a comprehensive Quran platform that combines beautiful design with powerful features, making it accessible to everyone. We believe in:
 
-### Setup Steps
+- 🤝 Community-driven development
+- 🎨 Beautiful and intuitive design
+- ♿ Accessibility for all users
+- 🌍 Global reach through localization
+- 📱 Cross-platform availability
 
-1. **Clone the project**
+## 🚀 Join Our Community
 
-   ```bash
-   git clone https://github.com/ahmed-abdat/quran-mr.git
-   cd quran-mr
-   ```
+We're building something special and we'd love for you to be part of it! Here's how you can join us:
 
-2. **Install dependencies**
+1. **Start Using the App**
 
-   ```bash
-   npm install
-   # or
-   yarn install
-   ```
+   - Visit our [live demo](https://qurane-mr.vercel.app/)
+   - Share feedback and suggestions
+   - Report any issues you find
 
-3. **Start development server**
+2. **Contribute to Development**
 
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   ```
+   - Check our [contribution guide](CONTRIBUTING.md)
+   - Pick up beginner-friendly issues
+   - Share your ideas and expertise
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
+3. **Spread the Word**
+   - Star the repository
+   - Share with your friends
+   - Join our discussions
 
-## 📋 Project Structure
+## 🎯 Future Roadmap
 
+- 📱 **PWA & Mobile**: Offline support, push notifications, and mobile-optimized layouts
+- 🎧 **Audio Features**: Multiple Qurra'a support, verse-by-verse playback
+- 🖥️ **Desktop Experience**: Enhanced layouts, keyboard shortcuts, and reading modes
+- 📝 **Learning Tools**: Personal notes, bookmarks, and study aids
+- 🌐 **Community**: Social features, study circles, and sharing capabilities
+
+## 🛠️ Quick Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/ahmed-abdat/quran-mr.git
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
 ```
-src/
-├── app/                # routes
-├── components/         # Reusable UI components
-├── features/
-│   └── quran/         # Quran-specific features
-└── data/               # Global data
-└── lib/                # Utility functions
-```
 
-## 🔜 Coming Soon
+Visit `http://localhost:3000` to see the application running.
 
-We're working on exciting new features:
+## 💪 How You Can Help
 
-- 📑 Enhanced navigation features
-- 💻 Improved desktop layout
-- 📱 Progressive Web App (PWA) support
-- 🔖 Advanced bookmarking system
-- 🌍 Multi-language support
+1. **Code Contributions**
 
-## 🤝 How to Contribute
+   - Fix bugs
+   - Add new features
+   - Improve performance
+   - Write tests
 
-We welcome contributions! Here's how you can help:
+2. **Non-Code Contributions**
 
-1. **Find an Issue**
+   - Improve documentation
+   - Help with translations
+   - Report bugs
+   - Share ideas
 
-   - Check our [Issues](https://github.com/ahmed-abdat/quran-mr/issues) page
-   - Look for `good first issue` labels for beginner-friendly tasks
+3. **Community Support**
+   - Help other contributors
+   - Share your knowledge
+   - Provide feedback
+   - Join discussions
 
-2. **Make Changes**
+## 🤝 Connect With Us
 
-   - Fork the repository
-   - Create a new branch for your feature
-   - Make your changes
-   - Test your changes locally
-
-3. **Submit Changes**
-   - Push your changes to your fork
-   - Create a Pull Request
-   - Wait for review and feedback
-
-See our [Contributing Guide](CONTRIBUTING.md) for detailed instructions.
-
-## 💬 Need Help?
-
-- Create an <a href="https://github.com/ahmed-abdat/quran-mr/issues" target="_blank" rel="noopener noreferrer">Issue</a> for bugs
-- <a href="https://wa.me/22242049074" target="_blank" rel="noopener noreferrer">Contact us on WhatsApp</a> for questions and support
-- Connect with the community to learn and share
+- 📫 [Report an Issue](https://github.com/ahmed-abdat/quran-mr/issues)
+- 💬 [WhatsApp Support](https://wa.me/22242049074)
+- 🌟 [Star us on GitHub](https://github.com/ahmed-abdat/quran-mr)
 
 ## 📝 License
 
@@ -108,8 +102,17 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <div align="center">
 
-Built with ❤️ for the Muslim community worldwide.
+Built with ❤️ by the community, for the community.
 
-<a href="https://qurane-mr.vercel.app/" target="_blank" rel="noopener noreferrer">Live Demo</a> | <a href="https://github.com/ahmed-abdat/quran-mr/issues" target="_blank" rel="noopener noreferrer">Report Bug</a> | <a href="https://wa.me/22242049074" target="_blank" rel="noopener noreferrer">Contact on WhatsApp</a>
+[Get Started](https://qurane-mr.vercel.app/) · [Learn More](docs/CODEBASE.md) · [Join Us](CONTRIBUTING.md)
 
 </div>
+
+<!-- MARKDOWN LINKS & IMAGES -->
+
+[contributors-shield]: https://img.shields.io/github/contributors/ahmed-abdat/quran-mr.svg?style=for-the-badge
+[contributors-url]: https://github.com/ahmed-abdat/quran-mr/graphs/contributors
+[issues-shield]: https://img.shields.io/github/issues/ahmed-abdat/quran-mr.svg?style=for-the-badge
+[issues-url]: https://github.com/ahmed-abdat/quran-mr/issues
+[license-shield]: https://img.shields.io/github/license/ahmed-abdat/quran-mr.svg?style=for-the-badge
+[license-url]: https://github.com/ahmed-abdat/quran-mr/blob/main/LICENSE

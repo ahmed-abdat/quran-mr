@@ -29,7 +29,7 @@
 
 import { Button } from "@/components/ui/button";
 import { BookOpen, ListTree, Settings } from "lucide-react";
-import { useQuranNavigationStore } from "@/features/quran/store/useQuranNavigationStore";
+import { useMushafNavigationStore } from "@/features/quran/store/useMushafNavigationStore";
 import { cn } from "@/lib/utils";
 
 // Navigation items configuration
@@ -76,7 +76,7 @@ const getButtonStyles = (
 
 export function BottomBar() {
   const { activeView, activeSurahId, setActiveView } =
-    useQuranNavigationStore();
+    useMushafNavigationStore();
   const isReadingMode = activeView === "surah-view";
 
   return (

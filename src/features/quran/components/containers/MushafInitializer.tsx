@@ -1,7 +1,7 @@
 /**
- * QuranInitializer Component
+ * MushafInitializer Component
  *
- * This component is responsible for initializing the Quran application state.
+ * This component is responsible for initializing the Mushaf (Quran) application state.
  * It handles:
  * - Setting initial view state
  * - Processing URL parameters
@@ -9,32 +9,32 @@
  *
  * @example
  * ```tsx
- * <QuranInitializer initialView="surah-list">
+ * <MushafInitializer initialView="surah-list">
  *   <YourComponent />
- * </QuranInitializer>
+ * </MushafInitializer>
  * ```
  */
 
 import { ReactNode, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import { useQuranNavigationStore } from "@/features/quran/store/useQuranNavigationStore";
+import { useMushafNavigationStore } from "@/features/quran/store/useMushafNavigationStore";
 import { QuranView } from "@/features/quran/types";
 
-interface QuranInitializerProps {
+interface MushafInitializerProps {
   children: ReactNode;
   initialView?: QuranView;
   initialSurahId?: number;
   initialAyahId?: number;
 }
 
-export function QuranInitializer({
+export function MushafInitializer({
   children,
   initialView = "surah-list",
   initialSurahId,
   initialAyahId,
-}: QuranInitializerProps) {
+}: MushafInitializerProps) {
   const { setActiveView, setActiveSurah, setActiveAyah } =
-    useQuranNavigationStore();
+    useMushafNavigationStore();
   const isInitialRender = useRef(true);
   const searchParams = useSearchParams();
 

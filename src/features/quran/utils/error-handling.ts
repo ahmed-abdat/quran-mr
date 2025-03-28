@@ -1,4 +1,4 @@
-import { QuranError } from "../types/quran-types";
+import { QuranError } from "../types/mushaf-types";
 
 /**
  * Handles QuranError types with appropriate user feedback

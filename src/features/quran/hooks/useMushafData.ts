@@ -1,8 +1,8 @@
 /**
- * useQuranData Hook
+ * useMushafData Hook
  *
- * Manages Quran data loading and navigation, providing:
- * 1. Structured Quran data access
+ * Manages Mushaf (Quran) data loading and navigation, providing:
+ * 1. Structured Mushaf data access
  * 2. Loading and error states
  * 3. Navigation helpers for surahs
  *
@@ -20,7 +20,7 @@
  *   error,
  *   getPrevSurah,
  *   getNextSurah,
- * } = useQuranData();
+ * } = useMushafData();
  * ```
  */
 
@@ -28,15 +28,15 @@
 
 import { useState, useEffect } from "react";
 import quranRawData from "@/data/quran.json";
-import { Surah, Ayah } from "@/features/quran/types";
+import { Surah, Ayah, RawAyahData } from "@/features/quran/types";
 
 /**
- * Transform raw Quran data into structured format
+ * Transform raw Mushaf data into structured format
  * @param rawData - Raw Quran data from JSON
  */
-function processQuranData(rawData: any[]): { surahs: Surah[] } {
+function processMushafData(rawData: RawAyahData[]): { surahs: Surah[] } {
   // Group ayahs by surah number
-  const surahsMap = new Map<number, any[]>();
+  const surahsMap = new Map<number, RawAyahData[]>();
   rawData.forEach((ayah) => {
     if (!surahsMap.has(ayah.sura_no)) {
       surahsMap.set(ayah.sura_no, []);
@@ -55,7 +55,7 @@ function processQuranData(rawData: any[]): { surahs: Surah[] } {
         sura_no: ayah.sura_no,
         sura_name_ar: ayah.sura_name_ar,
         sura_name_en: ayah.sura_name_en,
-        page: parseInt(ayah.page),
+        page: typeof ayah.page === "string" ? parseInt(ayah.page) : ayah.page,
         aya_no: ayah.aya_no,
         aya_text: ayah.aya_text,
       }));
@@ -65,9 +65,11 @@ function processQuranData(rawData: any[]): { surahs: Surah[] } {
         name_arabic: firstAyah.sura_name_ar,
         name_english: firstAyah.sura_name_en,
         name_english_translation: firstAyah.sura_name_en,
-        revelation_type: surahId === 9 ? "Medinan" : "Meccan", // TODO: Add proper revelation type data
         verses_count: ayahs.length,
-        page: parseInt(firstAyah.page),
+        page:
+          typeof firstAyah.page === "string"
+            ? parseInt(firstAyah.page)
+            : firstAyah.page,
         ayahs: processedAyahs,
       };
     }
@@ -77,7 +79,7 @@ function processQuranData(rawData: any[]): { surahs: Surah[] } {
   return { surahs: surahs.sort((a, b) => a.id - b.id) };
 }
 
-export function useQuranData() {
+export function useMushafData() {
   const [allSurahs, setAllSurahs] = useState<Surah[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -85,12 +87,12 @@ export function useQuranData() {
   // Process Quran data on mount
   useEffect(() => {
     try {
-      const { surahs } = processQuranData(quranRawData);
+      const { surahs } = processMushafData(quranRawData as RawAyahData[]);
       setAllSurahs(surahs);
     } catch (err) {
-      console.error("Error processing Quran data:", err);
+      console.error("Error processing Mushaf data:", err);
       setError(
-        err instanceof Error ? err : new Error("Failed to process Quran data")
+        err instanceof Error ? err : new Error("Failed to process Mushaf data")
       );
     } finally {
       setIsLoading(false);

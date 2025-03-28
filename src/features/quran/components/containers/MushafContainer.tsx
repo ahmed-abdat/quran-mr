@@ -1,11 +1,11 @@
 /**
- * QuranContainer Component
+ * MushafContainer Component
  *
- * The main container component for the Quran application. It orchestrates:
- * 1. Data fetching via useQuranData
- * 2. State initialization via QuranInitializer
- * 3. Layout management via QuranLayout
- * 4. View routing via QuranRouter
+ * The main container component for the Mushaf (Quran) application. It orchestrates:
+ * 1. Data fetching via useMushafData
+ * 2. State initialization via MushafInitializer
+ * 3. Layout management via MushafLayout
+ * 4. View routing via MushafRouter
  *
  * This component follows a clear separation of concerns:
  * - Data fetching and state management
@@ -15,10 +15,10 @@
  * @example
  * ```tsx
  * // Basic usage
- * <QuranContainer initialView="surah-list" />
+ * <MushafContainer initialView="surah-list" />
  *
  * // With initial surah and ayah
- * <QuranContainer
+ * <MushafContainer
  *   initialView="surah-view"
  *   initialSurahId={1}
  *   initialAyahId={1}
@@ -28,25 +28,25 @@
 
 "use client";
 
-import { useQuranData } from "@/features/quran/hooks/useQuranData";
-import { QuranLayout } from "../layouts/QuranLayout";
-import { QuranRouter } from "../routing/QuranRouter";
-import { QuranInitializer } from "./QuranInitializer";
+import { useMushafData } from "@/features/quran/hooks/useMushafData";
+import { MushafLayout } from "../layouts/MushafLayout";
+import { MushafRouter } from "../routing/MushafRouter";
+import { MushafInitializer } from "./MushafInitializer";
 import { QuranView } from "@/features/quran/types";
 
-interface QuranContainerProps {
+interface MushafContainerProps {
   initialView?: QuranView;
   initialSurahId?: number;
   initialAyahId?: number;
 }
 
-export function QuranContainer({
+export function MushafContainer({
   initialView = "surah-list",
   initialSurahId,
   initialAyahId,
-}: QuranContainerProps) {
+}: MushafContainerProps) {
   // Fetch Quran data
-  const { allSurahs, isLoading } = useQuranData();
+  const { allSurahs, isLoading } = useMushafData();
 
   // Show loading state if data is not ready
   if (isLoading || !allSurahs.length) {
@@ -54,14 +54,14 @@ export function QuranContainer({
   }
 
   return (
-    <QuranInitializer
+    <MushafInitializer
       initialView={initialView}
       initialSurahId={initialSurahId}
       initialAyahId={initialAyahId}
     >
-      <QuranLayout>
-        <QuranRouter surahs={allSurahs} />
-      </QuranLayout>
-    </QuranInitializer>
+      <MushafLayout>
+        <MushafRouter />
+      </MushafLayout>
+    </MushafInitializer>
   );
 }
