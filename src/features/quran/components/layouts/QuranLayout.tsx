@@ -1,3 +1,28 @@
+/**
+ * QuranLayout Component
+ *
+ * Main layout component that provides the structure for the Quran application.
+ * It manages:
+ * 1. Navigation bar (top)
+ * 2. Content area (middle)
+ * 3. Bottom bar (bottom)
+ * 4. UI visibility in reading mode
+ *
+ * Features:
+ * - Auto-hide UI on scroll in reading mode
+ * - Click-to-toggle UI in reading mode
+ * - Animated transitions for UI elements
+ * - Responsive safe areas
+ * - Dynamic titles based on current view
+ *
+ * @example
+ * ```tsx
+ * <QuranLayout>
+ *   <YourContent />
+ * </QuranLayout>
+ * ```
+ */
+
 "use client";
 
 import { ReactNode, useEffect, useRef } from "react";
@@ -8,84 +33,68 @@ import { useQuranSettingsStore } from "@/features/quran/store/useQuranSettingsSt
 import { cn } from "@/lib/utils";
 
 interface QuranLayoutProps {
+  /** The content to be rendered inside the layout */
   children: ReactNode;
 }
 
-/**
- * Main layout component for the Quran application
- * Optimized for focused reading experience
- */
+// View titles mapping for better maintainability
+const VIEW_TITLES: Record<string, string> = {
+  "surah-list": "قائمة السور",
+  search: "البحث في القرآن",
+  "surah-view": "قراءة القرآن",
+  settings: "الإعدادات",
+};
+
 export function QuranLayout({ children }: QuranLayoutProps) {
   const { activeView } = useQuranNavigationStore();
   const { isUIVisible, toggleUIVisibility } = useQuranSettingsStore();
   const mainRef = useRef<HTMLDivElement>(null);
+  const lastScrollY = useRef(0);
 
-  // Check if we're in reading mode
+  // View states
   const isReadingMode = activeView === "surah-view";
   const isSettingsView = activeView === "settings";
+  const showBackButton = ["surah-view", "search", "settings"].includes(
+    activeView
+  );
 
-  // Handle dismissing UI on scroll in reading mode
+  // Handle UI visibility on scroll in reading mode
   useEffect(() => {
     if (!isReadingMode || !isUIVisible) return;
-
-    let lastScrollY = 0;
-    const threshold = 50; // Minimum scroll distance before hiding UI
 
     const handleScroll = () => {
       if (!mainRef.current) return;
 
       const currentScrollY = window.scrollY;
-      const scrollingDown = currentScrollY > lastScrollY;
-      const scrollDistance = Math.abs(currentScrollY - lastScrollY);
+      const scrollingDown = currentScrollY > lastScrollY.current;
+      const scrollDistance = Math.abs(currentScrollY - lastScrollY.current);
 
-      // Only hide UI when scrolling down past threshold
-      if (scrollingDown && scrollDistance > threshold) {
+      // Hide UI when scrolling down past threshold (50px)
+      if (scrollingDown && scrollDistance > 50) {
         toggleUIVisibility();
       }
 
-      lastScrollY = currentScrollY;
+      lastScrollY.current = currentScrollY;
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isReadingMode, isUIVisible, toggleUIVisibility]);
 
-  // Determine title based on active view
-  const getTitleFromView = () => {
-    switch (activeView) {
-      case "surah-list":
-        return "قائمة السور";
-      case "search":
-        return "البحث في القرآن";
-      case "surah-view":
-        return "قراءة القرآن";
-      case "settings":
-        return "الإعدادات";
-      default:
-        return "القرآن الكريم";
-    }
-  };
-
-  // Show back button only on surah view, search and settings
-  const showBackButton =
-    activeView === "surah-view" ||
-    activeView === "search" ||
-    activeView === "settings";
-
-  // Handle content click in reading mode to toggle UI
+  // Handle content click in reading mode
   const handleContentClick = (e: React.MouseEvent) => {
-    if (isReadingMode) {
-      // Prevent toggling when clicking on interactive elements
-      const target = e.target as HTMLElement;
-      const isButtonClick =
-        target.tagName === "BUTTON" ||
-        target.closest("button") ||
-        target.getAttribute("role") === "button" ||
-        target.closest('[role="button"]');
+    if (!isReadingMode) return;
 
-      if (!isButtonClick) {
-        toggleUIVisibility();
-      }
+    // Prevent toggling when clicking interactive elements
+    const target = e.target as HTMLElement;
+    const isInteractive =
+      target.tagName === "BUTTON" ||
+      target.closest("button") ||
+      target.getAttribute("role") === "button" ||
+      target.closest('[role="button"]');
+
+    if (!isInteractive) {
+      toggleUIVisibility();
     }
   };
 
@@ -96,6 +105,7 @@ export function QuranLayout({ children }: QuranLayoutProps) {
         isReadingMode && "bg-background/95"
       )}
     >
+      {/* Main content area */}
       <main
         ref={mainRef}
         className={cn(
@@ -117,7 +127,7 @@ export function QuranLayout({ children }: QuranLayoutProps) {
         >
           <NavigationBar
             showBackButton={showBackButton}
-            title={getTitleFromView()}
+            title={VIEW_TITLES[activeView] || "القرآن الكريم"}
           />
         </div>
       )}
@@ -133,7 +143,7 @@ export function QuranLayout({ children }: QuranLayoutProps) {
       </div>
 
       {/* Safe area for bottom navigation */}
-      {isUIVisible && <div className="h-20 w-full" />}
+      {isUIVisible && <div className="h-20 w-full" aria-hidden="true" />}
     </div>
   );
 }

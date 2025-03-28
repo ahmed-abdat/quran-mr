@@ -1,3 +1,32 @@
+/**
+ * NavigationBar Component
+ *
+ * Top navigation bar that provides:
+ * 1. Back navigation (when enabled)
+ * 2. Dynamic title display
+ * 3. UI controls for reading mode
+ * 4. Quick access to search, theme toggle, and settings
+ *
+ * Features:
+ * - Adaptive styling for reading mode
+ * - Backdrop blur effects
+ * - Responsive layout
+ * - RTL support
+ * - Accessible button labels
+ *
+ * @example
+ * ```tsx
+ * // Basic usage
+ * <NavigationBar title="القرآن الكريم" />
+ *
+ * // With back button
+ * <NavigationBar
+ *   showBackButton={true}
+ *   title="قائمة السور"
+ * />
+ * ```
+ */
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -8,15 +37,19 @@ import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 interface NavigationBarProps {
+  /** Whether to show the back button */
   showBackButton?: boolean;
+  /** The title to display in the navigation bar */
   title?: string;
 }
 
-/**
- * NavigationBar component
- * Provides top navigation and search functionality
- * Designed to be minimal and non-distracting
- */
+// Button variants based on reading mode
+const getButtonVariant = (isReadingMode: boolean) => ({
+  variant: "ghost" as const,
+  size: "icon" as const,
+  className: cn(isReadingMode && "text-muted-foreground hover:text-foreground"),
+});
+
 export function NavigationBar({
   showBackButton = false,
   title = "القرآن الكريم",
@@ -24,43 +57,34 @@ export function NavigationBar({
   const { activeView, setActiveView } = useQuranNavigationStore();
   const { isUIVisible, toggleUIVisibility } = useQuranSettingsStore();
 
-  // Determine if we're in reading mode to adjust UI
   const isReadingMode = activeView === "surah-view";
+  const buttonProps = getButtonVariant(isReadingMode);
 
-  const handleBack = () => {
-    // Navigate back to the surah list
-    setActiveView("surah-list");
-  };
-
-  const handleSettingsClick = () => {
-    setActiveView("settings");
-  };
-
-  const handleSearchClick = () => {
-    setActiveView("search");
-  };
-
-  // Use more subtle styling in reading mode
-  const navbarClasses = cn(
-    "transition-all duration-300",
-    isReadingMode
-      ? "bg-background/75 backdrop-blur-xl border-b border-muted/20 shadow-sm"
-      : "bg-background/80 backdrop-blur-xl border-b border-muted/30 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.1)]"
-  );
+  // Navigation handlers
+  const handleBack = () => setActiveView("surah-list");
+  const handleSettingsClick = () => setActiveView("settings");
+  const handleSearchClick = () => setActiveView("search");
 
   return (
-    <div className={navbarClasses}>
+    <nav
+      className={cn(
+        "transition-all duration-300",
+        isReadingMode
+          ? "bg-background/75 backdrop-blur-xl border-b border-muted/20 shadow-sm"
+          : "bg-background/80 backdrop-blur-xl border-b border-muted/30 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.1)]"
+      )}
+      role="navigation"
+      aria-label="Main navigation"
+    >
       <div className="container mx-auto px-3 py-2">
         <div className="flex items-center justify-between">
+          {/* Left side: Back button and title */}
           <div className="flex items-center gap-2">
             {showBackButton && (
               <Button
-                variant="ghost"
-                size="icon"
+                {...buttonProps}
                 onClick={handleBack}
-                className={cn(
-                  isReadingMode && "text-muted-foreground hover:text-foreground"
-                )}
+                aria-label="Go back"
               >
                 <ChevronRight className="h-5 w-5" />
               </Button>
@@ -77,13 +101,13 @@ export function NavigationBar({
             </h1>
           </div>
 
+          {/* Right side: Action buttons */}
           <div className="flex items-center gap-1">
             {isReadingMode && (
               <Button
-                variant="ghost"
-                size="icon"
+                {...buttonProps}
                 onClick={toggleUIVisibility}
-                className="text-muted-foreground hover:text-foreground"
+                aria-label={isUIVisible ? "Hide interface" : "Show interface"}
                 title={isUIVisible ? "إخفاء الواجهة" : "إظهار الواجهة"}
               >
                 {isUIVisible ? (
@@ -95,14 +119,13 @@ export function NavigationBar({
             )}
 
             <Button
-              variant="ghost"
-              size="icon"
+              {...buttonProps}
               onClick={handleSearchClick}
               className={cn(
-                isReadingMode
-                  ? "text-muted-foreground hover:text-foreground"
-                  : "text-primary"
+                buttonProps.className,
+                !isReadingMode && "text-primary"
               )}
+              aria-label="Search"
             >
               <Search className="h-5 w-5" />
             </Button>
@@ -110,18 +133,15 @@ export function NavigationBar({
             <ThemeToggle />
 
             <Button
-              variant="ghost"
-              size="icon"
+              {...buttonProps}
               onClick={handleSettingsClick}
-              className={cn(
-                isReadingMode && "text-muted-foreground hover:text-foreground"
-              )}
+              aria-label="Settings"
             >
               <Settings className="h-5 w-5" />
             </Button>
           </div>
         </div>
       </div>
-    </div>
+    </nav>
   );
 }

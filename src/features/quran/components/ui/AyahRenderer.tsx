@@ -13,6 +13,7 @@ interface AyahRendererProps {
 /**
  * AyahRenderer component
  * Renders a single Ayah with optimized styling for focused reading
+ * and enhanced highlighting effects
  */
 export function AyahRenderer({ ayah, highlightedText }: AyahRendererProps) {
   const { activeView } = useQuranNavigationStore();
@@ -22,7 +23,12 @@ export function AyahRenderer({ ayah, highlightedText }: AyahRendererProps) {
   // Handle rendering HTML content (for highlighted text in search)
   const renderTextWithHighlight = () => {
     if (highlightedText) {
-      return <span dangerouslySetInnerHTML={{ __html: highlightedText }} />;
+      return (
+        <span
+          dangerouslySetInnerHTML={{ __html: highlightedText }}
+          className="transition-colors duration-300"
+        />
+      );
     }
     return <>{ayah.aya_text}</>;
   };
@@ -30,9 +36,9 @@ export function AyahRenderer({ ayah, highlightedText }: AyahRendererProps) {
   return (
     <div
       className={cn(
-        "p-4 rounded-lg transition-colors relative",
+        "p-4 rounded-lg transition-all duration-300 relative",
         isReadingMode
-          ? "mb-4 bg-background/50 backdrop-blur-sm shadow-sm border border-muted/10"
+          ? "mb-4 bg-background/50 backdrop-blur-sm shadow-sm border border-muted/10 hover:shadow-md"
           : "hover:bg-muted/5"
       )}
     >

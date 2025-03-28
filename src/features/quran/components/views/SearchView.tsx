@@ -1,102 +1,80 @@
 "use client";
-import { useQuranSearch } from "@/features/quran/hooks/useQuranSearch";
+
+import { useQuranNavigationStore } from "@/features/quran/store/useQuranNavigationStore";
+import { useQuranSearchStore } from "@/features/quran/store/useQuranSearchStore";
+import { searchAyahs } from "@/features/quran/utils/quran-search";
+import { ChevronLeft, Search, X } from "lucide-react";
+import { useEffect, useRef } from "react";
 import { useQuranNavigation } from "@/features/quran/hooks/useQuranNavigation";
-import { X, Search, Copy, Check, ChevronLeft } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
 
 /**
- * SearchView component
- * Displays a search interface for finding ayahs in the Quran
- * with enhanced UX and immediate focus
+ * SearchView Component
+ *
+ * Displays a search interface for finding ayahs in the Quran.
+ * Provides direct integration with the Quran search store for efficient
+ * state management and search functionality.
+ *
+ * Features:
+ * - Auto-focus search input
+ * - Recent searches management
+ * - Search result display with ayah context
+ * - Navigation to specific ayahs
+ * - RTL support
+ * - Responsive design
+ *
+ * @example
+ * ```tsx
+ * <SearchView />
+ * ```
  */
+
 export function SearchView() {
   const {
-    searchQuery,
-    setSearchQuery,
-    searchResults,
-    isSearching,
+    query,
+    results,
     recentSearches,
-    searchInitiated,
-    performSearch,
+    setQuery,
+    setResults,
+    addRecentSearch,
+    removeRecentSearch,
     clearSearch,
-    removeSearchTerm,
-    highlightSearchText,
-  } = useQuranSearch();
+  } = useQuranSearchStore();
 
   const { navigateToAyah } = useQuranNavigation();
   const inputRef = useRef<HTMLInputElement>(null);
-  const [copiedAyahId, setCopiedAyahId] = useState<number | null>(null);
-  const copyTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Auto-focus the search input when the view mounts
+  // Auto-focus search input when component mounts
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
+    inputRef.current?.focus();
   }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      performSearch(searchQuery);
+    if (!query.trim()) return;
+
+    try {
+      const searchResults = searchAyahs(query);
+      setResults(searchResults);
+      addRecentSearch(query);
+    } catch (error) {
+      console.error("Search error:", error);
+      setResults([]);
     }
   };
 
   const handleResultClick = (ayahId: number, surahId: number) => {
-    // Navigate to the ayah with search query parameter
-    navigateToAyah(surahId, ayahId, searchQuery);
+    // Keep the search query in store when navigating
+    addRecentSearch(query); // Save to recent searches if not already there
+    navigateToAyah(surahId, ayahId);
   };
-
-  const handleCopyAyah = async (
-    ayah: {
-      id: number;
-      aya_text: string;
-      sura_name_ar: string;
-      aya_no: number;
-    },
-    e: React.MouseEvent
-  ) => {
-    e.stopPropagation();
-    try {
-      // Format the ayah text with surah name and number
-      const textToCopy = `${ayah.aya_text}\n\n— سورة ${ayah.sura_name_ar}، الآية ${ayah.aya_no}`;
-      await navigator.clipboard.writeText(textToCopy);
-
-      // Show success feedback
-      setCopiedAyahId(ayah.id);
-
-      // Clear previous timeout if exists
-      if (copyTimeoutRef.current) {
-        clearTimeout(copyTimeoutRef.current);
-      }
-
-      // Reset copied state after 2 seconds
-      copyTimeoutRef.current = setTimeout(() => {
-        setCopiedAyahId(null);
-      }, 2000);
-    } catch (err) {
-      console.error("Failed to copy text:", err);
-    }
-  };
-
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    const timeout = copyTimeoutRef.current;
-    return () => {
-      if (timeout) {
-        clearTimeout(timeout);
-      }
-    };
-  }, []);
 
   return (
     <div className="space-y-6">
       {/* Header with result count */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-medium">نتائج البحث</h1>
-        {searchResults.length > 0 && (
-          <span className="text-muted-foreground">{searchResults.length}</span>
+        {results.length > 0 && (
+          <span className="text-muted-foreground">{results.length}</span>
         )}
       </div>
 
@@ -106,14 +84,14 @@ export function SearchView() {
           <input
             ref={inputRef}
             type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
             placeholder="البحث في القرآن الكريم..."
             className="w-full h-12 pr-12 pl-4 rounded-lg bg-muted/30 border border-muted focus:border-primary focus:ring-1 focus:ring-primary transition-colors text-right"
             dir="rtl"
           />
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-          {searchQuery && (
+          {query && (
             <button
               type="button"
               onClick={clearSearch}
@@ -126,7 +104,7 @@ export function SearchView() {
       </form>
 
       {/* Recent searches */}
-      {recentSearches.length > 0 && !searchInitiated && (
+      {recentSearches.length > 0 && !results.length && (
         <div className="border rounded-lg p-4">
           <div className="flex justify-between items-center mb-2">
             <h3 className="text-sm font-medium">عمليات البحث الأخيرة</h3>
@@ -137,8 +115,9 @@ export function SearchView() {
                 key={term}
                 className="group flex items-center gap-1 text-sm bg-muted/30 hover:bg-muted/50 px-3 py-1.5 rounded-full cursor-pointer transition-colors"
                 onClick={() => {
-                  setSearchQuery(term);
-                  performSearch(term);
+                  setQuery(term);
+                  const event = new Event("submit") as any;
+                  handleSearch(event);
                 }}
               >
                 <span>{term}</span>
@@ -147,7 +126,7 @@ export function SearchView() {
                   className="h-4 w-4 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                   onClick={(e) => {
                     e.stopPropagation();
-                    removeSearchTerm(term);
+                    removeRecentSearch(term);
                   }}
                 >
                   <X className="h-3 w-3" />
@@ -159,9 +138,9 @@ export function SearchView() {
       )}
 
       {/* Results */}
-      {searchResults.length > 0 ? (
+      {results.length > 0 ? (
         <div className="space-y-4">
-          {searchResults.map((ayah) => (
+          {results.map((ayah) => (
             <div
               key={ayah.id}
               className="border rounded-lg overflow-hidden bg-card hover:bg-muted/5 transition-colors"
@@ -174,32 +153,13 @@ export function SearchView() {
                     الآية {ayah.aya_no}
                   </span>
                 </div>
-                <button
-                  onClick={(e) => handleCopyAyah(ayah, e)}
-                  className={cn(
-                    "h-8 w-8 flex items-center justify-center rounded-md transition-colors",
-                    copiedAyahId === ayah.id
-                      ? "bg-primary/10 text-primary"
-                      : "hover:bg-muted/50"
-                  )}
-                  title="نسخ الآية"
-                >
-                  {copiedAyahId === ayah.id ? (
-                    <Check className="h-4 w-4" />
-                  ) : (
-                    <Copy className="h-4 w-4" />
-                  )}
-                </button>
               </div>
 
               {/* Ayah text */}
               <div className="p-4">
-                <p
-                  className="font-arabic text-lg leading-loose text-right"
-                  dangerouslySetInnerHTML={{
-                    __html: highlightSearchText(ayah.aya_text, searchQuery),
-                  }}
-                />
+                <p className="font-arabic text-lg leading-loose text-right">
+                  {ayah.aya_text}
+                </p>
               </div>
 
               {/* Go to ayah button */}
@@ -215,16 +175,16 @@ export function SearchView() {
             </div>
           ))}
         </div>
-      ) : searchInitiated && !isSearching ? (
+      ) : query && !results.length ? (
         <div className="text-center py-8 border rounded-lg">
           <p className="text-muted-foreground">
-            لم يتم العثور على نتائج لـ &quot;{searchQuery}&quot;
+            لم يتم العثور على نتائج لـ &quot;{query}&quot;
           </p>
         </div>
       ) : null}
 
       {/* Initial state */}
-      {!searchQuery && !searchResults.length && !searchInitiated && (
+      {!query && !results.length && (
         <div className="text-center py-12">
           <p className="text-muted-foreground">
             أدخل كلمة أو جملة للبحث في القرآن الكريم

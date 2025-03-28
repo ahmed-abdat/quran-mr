@@ -1,48 +1,72 @@
+/**
+ * useQuranNavigation Hook
+ *
+ * Manages navigation within the Quran application, providing:
+ * 1. View navigation (Surah list, Search, Settings)
+ * 2. Surah navigation (Next/Previous)
+ * 3. Ayah navigation with search highlighting
+ * 4. URL synchronization
+ *
+ * Features:
+ * - Type-safe navigation
+ * - URL state management
+ * - Surah and ayah navigation
+ * - Search integration
+ *
+ * @example
+ * ```tsx
+ * const {
+ *   activeView,
+ *   activeSurahId,
+ *   navigateToSurah,
+ *   navigateToAyah,
+ *   navigateToSearch,
+ * } = useQuranNavigation();
+ * ```
+ */
+
 import { useCallback } from "react";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useQuranData } from "./useQuranData";
-import { QuranView } from "@/features/quran/types";
 import { useQuranNavigationStore } from "../store/useQuranNavigationStore";
 
-/**
- * Custom hook for Quran navigation
- * Handles routing and navigation between different views and surahs
- */
 export function useQuranNavigation() {
   const router = useRouter();
   const { getPrevSurah, getNextSurah } = useQuranData();
   const quranStore = useQuranNavigationStore();
 
-  // Navigation functions
+  /**
+   * Navigate to a specific surah
+   * @param surahId - The ID of the surah to navigate to
+   */
   const navigateToSurah = useCallback(
     (surahId: number) => {
       quranStore.setActiveView("surah-view");
       quranStore.setActiveSurah(surahId);
-      // Reset ayah selection when navigating to a new surah
-      quranStore.setActiveAyah(undefined);
+      quranStore.setActiveAyah(undefined); // Reset ayah selection
       router.push(`/quran/${surahId}`);
     },
     [router, quranStore]
   );
 
+  /**
+   * Navigate to a specific ayah within a surah
+   * @param surahId - The ID of the surah
+   * @param ayahId - The ID of the ayah
+   */
   const navigateToAyah = useCallback(
-    (surahId: number, ayahId: number, searchQuery?: string) => {
+    (surahId: number, ayahId: number) => {
       quranStore.setActiveView("surah-view");
       quranStore.setActiveSurah(surahId);
       quranStore.setActiveAyah(ayahId);
-
-      // Build the URL with search query if provided
-      const url = searchQuery
-        ? `/quran/${surahId}?ayah=${ayahId}&q=${encodeURIComponent(
-            searchQuery
-          )}`
-        : `/quran/${surahId}?ayah=${ayahId}`;
-
-      router.push(url);
+      router.push(`/quran/${surahId}?ayah=${ayahId}`);
     },
     [router, quranStore]
   );
 
+  /**
+   * Navigate to the search view
+   */
   const navigateToSearch = useCallback(() => {
     quranStore.setActiveView("search");
     quranStore.setActiveSurah(undefined);
@@ -50,6 +74,9 @@ export function useQuranNavigation() {
     router.push("/quran/search");
   }, [router, quranStore]);
 
+  /**
+   * Navigate to the surah list view
+   */
   const navigateToSurahList = useCallback(() => {
     quranStore.setActiveView("surah-list");
     quranStore.setActiveSurah(undefined);
@@ -57,6 +84,9 @@ export function useQuranNavigation() {
     router.push("/quran");
   }, [router, quranStore]);
 
+  /**
+   * Navigate to the next surah if available
+   */
   const navigateToNextSurah = useCallback(() => {
     const nextSurah = getNextSurah(quranStore.activeSurahId);
     if (nextSurah) {
@@ -64,6 +94,9 @@ export function useQuranNavigation() {
     }
   }, [quranStore.activeSurahId, getNextSurah, navigateToSurah]);
 
+  /**
+   * Navigate to the previous surah if available
+   */
   const navigateToPrevSurah = useCallback(() => {
     const prevSurah = getPrevSurah(quranStore.activeSurahId);
     if (prevSurah) {
@@ -72,9 +105,12 @@ export function useQuranNavigation() {
   }, [quranStore.activeSurahId, getPrevSurah, navigateToSurah]);
 
   return {
+    // Current state
     activeView: quranStore.activeView,
     activeSurahId: quranStore.activeSurahId,
     activeAyahId: quranStore.activeAyahId,
+
+    // Navigation actions
     navigateToSurah,
     navigateToAyah,
     navigateToSearch,

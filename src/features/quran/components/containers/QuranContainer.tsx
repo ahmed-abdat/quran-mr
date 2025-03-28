@@ -1,14 +1,41 @@
+/**
+ * QuranContainer Component
+ *
+ * The main container component for the Quran application. It orchestrates:
+ * 1. Data fetching via useQuranData
+ * 2. State initialization via QuranInitializer
+ * 3. Layout management via QuranLayout
+ * 4. View routing via QuranRouter
+ *
+ * This component follows a clear separation of concerns:
+ * - Data fetching and state management
+ * - Layout and UI structure
+ * - View routing and rendering
+ *
+ * @example
+ * ```tsx
+ * // Basic usage
+ * <QuranContainer initialView="surah-list" />
+ *
+ * // With initial surah and ayah
+ * <QuranContainer
+ *   initialView="surah-view"
+ *   initialSurahId={1}
+ *   initialAyahId={1}
+ * />
+ * ```
+ */
+
 "use client";
 
-import { useEffect, useRef } from "react";
-import { useQuranNavigationStore } from "@/features/quran/store/useQuranNavigationStore";
 import { useQuranData } from "@/features/quran/hooks/useQuranData";
-import { QuranViewRouter } from "./QuranViewRouter";
 import { QuranLayout } from "../layouts/QuranLayout";
-import { useSearchParams } from "next/navigation";
+import { QuranRouter } from "../routing/QuranRouter";
+import { QuranInitializer } from "./QuranInitializer";
+import { QuranView } from "@/features/quran/types";
 
 interface QuranContainerProps {
-  initialView?: "surah-list" | "surah-view" | "search";
+  initialView?: QuranView;
   initialSurahId?: number;
   initialAyahId?: number;
 }
@@ -18,41 +45,23 @@ export function QuranContainer({
   initialSurahId,
   initialAyahId,
 }: QuranContainerProps) {
-  const { setActiveView, setActiveSurah, setActiveAyah, activeView } =
-    useQuranNavigationStore();
-  const { allSurahs } = useQuranData();
-  const isInitialRender = useRef(true);
-  const searchParams = useSearchParams();
+  // Fetch Quran data
+  const { allSurahs, isLoading } = useQuranData();
 
-  // Initialize store from props and URL parameters ONLY on first render
-  useEffect(() => {
-    if (isInitialRender.current) {
-      if (initialView) setActiveView(initialView);
-      if (initialSurahId) setActiveSurah(initialSurahId);
-
-      // Check if we have an ayah parameter in the URL
-      const ayahFromParams = searchParams.get("ayah");
-      if (ayahFromParams) {
-        setActiveAyah(parseInt(ayahFromParams, 10));
-      } else if (initialAyahId) {
-        setActiveAyah(initialAyahId);
-      }
-
-      isInitialRender.current = false;
-    }
-  }, [
-    initialView,
-    initialSurahId,
-    initialAyahId,
-    setActiveView,
-    setActiveSurah,
-    setActiveAyah,
-    searchParams,
-  ]);
+  // Show loading state if data is not ready
+  if (isLoading || !allSurahs.length) {
+    return <div>جاري التحميل...</div>;
+  }
 
   return (
-    <QuranLayout>
-      <QuranViewRouter activeView={activeView} surahs={allSurahs} />
-    </QuranLayout>
+    <QuranInitializer
+      initialView={initialView}
+      initialSurahId={initialSurahId}
+      initialAyahId={initialAyahId}
+    >
+      <QuranLayout>
+        <QuranRouter surahs={allSurahs} />
+      </QuranLayout>
+    </QuranInitializer>
   );
 }
