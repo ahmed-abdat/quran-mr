@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { Surah } from "@/features/quran/types";
 import { cn } from "@/lib/utils";
-import { useQuranStore } from "@/features/quran/store/useQuranStore";
+import { useQuranNavigationStore } from "@/features/quran/store/useQuranNavigationStore";
 import { SearchBar } from "../ui";
 
 interface SurahListViewProps {
@@ -16,7 +16,7 @@ interface SurahListViewProps {
  */
 export function SurahListView({ surahs }: SurahListViewProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const quranStore = useQuranStore();
+  const quranStore = useQuranNavigationStore();
 
   // Filter surahs based on search query
   const filteredSurahs = useMemo(() => {

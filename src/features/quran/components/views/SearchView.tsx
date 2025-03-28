@@ -1,7 +1,4 @@
 "use client";
-
-import { Button } from "@/components/ui/button";
-import { useQuranStore } from "@/features/quran/store/useQuranStore";
 import { useQuranSearch } from "@/features/quran/hooks/useQuranSearch";
 import { useQuranNavigation } from "@/features/quran/hooks/useQuranNavigation";
 import { X, Search, Copy, Check, ChevronLeft } from "lucide-react";
@@ -28,7 +25,6 @@ export function SearchView() {
   } = useQuranSearch();
 
   const { navigateToAyah } = useQuranNavigation();
-  const quranStore = useQuranStore();
   const inputRef = useRef<HTMLInputElement>(null);
   const [copiedAyahId, setCopiedAyahId] = useState<number | null>(null);
   const copyTimeoutRef = useRef<NodeJS.Timeout | null>(null);

@@ -11,7 +11,6 @@ export { QuranViewRouter } from "./components/containers/QuranViewRouter";
 export { SurahListView } from "./components/views/SurahListView";
 export { SurahView } from "./components/views/SurahView";
 export { SearchView } from "./components/views/SearchView";
-export { JuzListView } from "./components/views/JuzListView";
 
 // Layout components
 export { BottomBar } from "./components/layouts/BottomBar";
@@ -28,10 +27,10 @@ export { SurahHeader } from "./components/ui/SurahHeader";
 export { useQuranData } from "./hooks/useQuranData";
 export { useQuranNavigation } from "./hooks/useQuranNavigation";
 export { useQuranSearch } from "./hooks/useQuranSearch";
-export { useQuranSettings } from "./hooks/useQuranSettings";
 
 // Store
-export { useQuranStore } from "./store/useQuranStore";
+export { useQuranNavigationStore } from "./store/useQuranNavigationStore";
+export { useQuranSettingsStore } from "./store/useQuranSettingsStore";
 
 // Utils
 export { getStructuredQuranData } from "./utils/quran-data";

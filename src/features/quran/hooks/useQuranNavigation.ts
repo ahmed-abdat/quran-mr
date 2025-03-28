@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useQuranData } from "./useQuranData";
 import { QuranView } from "@/features/quran/types";
-import { useQuranStore } from "../store/useQuranStore";
+import { useQuranNavigationStore } from "../store/useQuranNavigationStore";
 
 /**
  * Custom hook for Quran navigation
@@ -10,10 +10,8 @@ import { useQuranStore } from "../store/useQuranStore";
  */
 export function useQuranNavigation() {
   const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const { getPrevSurah, getNextSurah, getJuzByNumber } = useQuranData();
-  const quranStore = useQuranStore();
+  const { getPrevSurah, getNextSurah } = useQuranData();
+  const quranStore = useQuranNavigationStore();
 
   // Navigation functions
   const navigateToSurah = useCallback(
@@ -44,28 +42,6 @@ export function useQuranNavigation() {
     },
     [router, quranStore]
   );
-
-  const navigateToJuz = useCallback(
-    (juzId: number) => {
-      const juz = getJuzByNumber(juzId);
-      if (juz) {
-        quranStore.setActiveView("surah-view");
-        quranStore.setActiveSurah(juz.startSurah);
-        quranStore.setActiveAyah(juz.startAyah);
-        router.push(
-          `/quran/${juz.startSurah}?ayah=${juz.startAyah}&juz=${juzId}`
-        );
-      }
-    },
-    [router, quranStore, getJuzByNumber]
-  );
-
-  const navigateToJuzList = useCallback(() => {
-    quranStore.setActiveView("juz-list");
-    quranStore.setActiveSurah(undefined);
-    quranStore.setActiveAyah(undefined);
-    router.push("/quran/juz");
-  }, [router, quranStore]);
 
   const navigateToSearch = useCallback(() => {
     quranStore.setActiveView("search");
@@ -101,8 +77,6 @@ export function useQuranNavigation() {
     activeAyahId: quranStore.activeAyahId,
     navigateToSurah,
     navigateToAyah,
-    navigateToJuz,
-    navigateToJuzList,
     navigateToSearch,
     navigateToSurahList,
     navigateToNextSurah,

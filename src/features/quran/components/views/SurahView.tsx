@@ -1,7 +1,8 @@
 "use client";
 
 import { Surah } from "@/features/quran/types";
-import { useQuranStore } from "@/features/quran/store/useQuranStore";
+import { useQuranNavigationStore } from "@/features/quran/store/useQuranNavigationStore";
+import { useQuranSettingsStore } from "@/features/quran/store/useQuranSettingsStore";
 import { useQuranSearch } from "@/features/quran/hooks/useQuranSearch";
 import { AyahRenderer } from "../ui/AyahRenderer";
 import { SurahHeader } from "../ui/SurahHeader";
@@ -10,7 +11,7 @@ import { cn } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 
-interface SurahViewProps {
+export interface SurahViewProps {
   surah: Surah;
 }
 
@@ -19,7 +20,8 @@ interface SurahViewProps {
  * Displays a complete surah with header, basmala, and ayahs
  */
 export function SurahView({ surah }: SurahViewProps) {
-  const { fontSize, displayMode, activeView, activeAyahId } = useQuranStore();
+  const { fontSize, displayMode } = useQuranSettingsStore();
+  const { activeView, activeAyahId } = useQuranNavigationStore();
   const { highlightSearchText } = useQuranSearch();
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("q");
