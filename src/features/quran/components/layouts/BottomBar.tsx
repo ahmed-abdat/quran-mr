@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { BookOpen, ListTree, Settings } from "lucide-react";
-import { useQuranStore } from "@/features/quran/store/useQuranStore";
+import { useQuranNavigationStore } from "@/features/quran/store/useQuranNavigationStore";
 import { QuranView } from "@/features/quran/types";
 import { cn } from "@/lib/utils";
 
@@ -12,14 +12,14 @@ import { cn } from "@/lib/utils";
  * Designed to be minimal during reading
  */
 export function BottomBar() {
-  const quranStore = useQuranStore();
-  const { activeView, activeSurahId } = quranStore;
+  const { activeView, activeSurahId, setActiveView } =
+    useQuranNavigationStore();
 
   // Check if we're in reading mode for visual adjustments
   const isReadingMode = activeView === "surah-view";
 
   const handleNavigation = (view: QuranView) => {
-    quranStore.setActiveView(view);
+    setActiveView(view);
   };
 
   // Navigation items for consistent usage - without search (moved to NavigationBar)

@@ -1,7 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useQuranStore } from "@/features/quran/store/useQuranStore";
+import { useQuranNavigationStore } from "@/features/quran/store/useQuranNavigationStore";
+import { useQuranSettingsStore } from "@/features/quran/store/useQuranSettingsStore";
 import { useState, useEffect } from "react";
 import {
   Check,
@@ -10,9 +11,12 @@ import {
   Minus,
   Plus,
   ChevronRight,
+  Moon,
+  Sun,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { useTheme } from "next-themes";
 
 /**
  * SettingsView component
@@ -24,24 +28,28 @@ export function SettingsView() {
     displayMode,
     increaseFontSize,
     decreaseFontSize,
-    setActiveView,
     toggleDisplayMode,
-  } = useQuranStore();
+  } = useQuranSettingsStore();
+
+  const { setActiveView } = useQuranNavigationStore();
+  const { theme, setTheme } = useTheme();
 
   const [savedSettings, setSavedSettings] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
   const [initialSettings, setInitialSettings] = useState({
     fontSize,
     displayMode,
+    theme: theme || "light",
   });
 
   // Track changes by comparing current settings with initial settings
   useEffect(() => {
     const settingsChanged =
       fontSize !== initialSettings.fontSize ||
-      displayMode !== initialSettings.displayMode;
+      displayMode !== initialSettings.displayMode ||
+      theme !== initialSettings.theme;
     setHasChanges(settingsChanged);
-  }, [fontSize, displayMode, initialSettings]);
+  }, [fontSize, displayMode, theme, initialSettings]);
 
   const handleSave = () => {
     if (!hasChanges) return;
@@ -60,6 +68,13 @@ export function SettingsView() {
         } → ${displayMode === "continuous" ? "متصل" : "منفصل"}`
       );
     }
+    if (theme !== initialSettings.theme) {
+      changes.push(
+        `المظهر: ${initialSettings.theme === "dark" ? "داكن" : "فاتح"} → ${
+          theme === "dark" ? "داكن" : "فاتح"
+        }`
+      );
+    }
 
     // Show toast with changes
     toast.success("تم حفظ الإعدادات", {
@@ -70,6 +85,7 @@ export function SettingsView() {
     setInitialSettings({
       fontSize,
       displayMode,
+      theme: theme || "light",
     });
     setHasChanges(false);
 
@@ -88,18 +104,14 @@ export function SettingsView() {
 
   const handleFontSizeChange = (increase: boolean) => {
     if (increase) {
-      if (fontSize < 40) {
-        increaseFontSize();
-      }
+      increaseFontSize();
     } else {
-      if (fontSize > 18) {
-        decreaseFontSize();
-      }
+      decreaseFontSize();
     }
   };
 
-  const handleDisplayModeChange = () => {
-    toggleDisplayMode();
+  const handleThemeChange = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
   };
 
   return (
@@ -148,9 +160,7 @@ export function SettingsView() {
           <div className="space-y-2">
             <button
               onClick={
-                displayMode !== "continuous"
-                  ? handleDisplayModeChange
-                  : undefined
+                displayMode !== "continuous" ? toggleDisplayMode : undefined
               }
               className={cn(
                 "w-full text-right px-4 py-3 rounded-lg transition-all",
@@ -165,7 +175,7 @@ export function SettingsView() {
             </button>
             <button
               onClick={
-                displayMode !== "separate" ? handleDisplayModeChange : undefined
+                displayMode !== "separate" ? toggleDisplayMode : undefined
               }
               className={cn(
                 "w-full text-right px-4 py-3 rounded-lg transition-all",
@@ -179,6 +189,22 @@ export function SettingsView() {
               <span>عرض منفصل (كل آية في سطر)</span>
             </button>
           </div>
+        </div>
+
+        {/* Theme toggle */}
+        <div className="p-6 space-y-3 border-t bg-card">
+          <h2 className="text-lg font-semibold">المظهر</h2>
+          <button
+            onClick={handleThemeChange}
+            className="w-full text-right px-4 py-3 rounded-lg transition-all flex items-center justify-between hover:bg-muted/50"
+          >
+            <span>{theme === "dark" ? "المظهر الداكن" : "المظهر الفاتح"}</span>
+            {theme === "dark" ? (
+              <Moon className="h-4 w-4" />
+            ) : (
+              <Sun className="h-4 w-4" />
+            )}
+          </button>
         </div>
 
         {/* About section */}

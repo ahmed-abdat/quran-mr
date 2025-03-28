@@ -2,7 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { ChevronRight, Search, Settings, Eye, EyeOff } from "lucide-react";
-import { useQuranStore } from "@/features/quran/store/useQuranStore";
+import { useQuranNavigationStore } from "@/features/quran/store/useQuranNavigationStore";
+import { useQuranSettingsStore } from "@/features/quran/store/useQuranSettingsStore";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
 
@@ -20,9 +21,8 @@ export function NavigationBar({
   showBackButton = false,
   title = "القرآن الكريم",
 }: NavigationBarProps) {
-  const quranStore = useQuranStore();
-  const { isUIVisible, toggleUIVisibility, activeView, setActiveView } =
-    quranStore;
+  const { activeView, setActiveView } = useQuranNavigationStore();
+  const { isUIVisible, toggleUIVisibility } = useQuranSettingsStore();
 
   // Determine if we're in reading mode to adjust UI
   const isReadingMode = activeView === "surah-view";

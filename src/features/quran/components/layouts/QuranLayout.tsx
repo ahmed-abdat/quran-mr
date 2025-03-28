@@ -3,7 +3,8 @@
 import { ReactNode, useEffect, useRef } from "react";
 import { NavigationBar } from "./NavigationBar";
 import { BottomBar } from "./BottomBar";
-import { useQuranStore } from "@/features/quran/store/useQuranStore";
+import { useQuranNavigationStore } from "@/features/quran/store/useQuranNavigationStore";
+import { useQuranSettingsStore } from "@/features/quran/store/useQuranSettingsStore";
 import { cn } from "@/lib/utils";
 
 interface QuranLayoutProps {
@@ -15,7 +16,8 @@ interface QuranLayoutProps {
  * Optimized for focused reading experience
  */
 export function QuranLayout({ children }: QuranLayoutProps) {
-  const { activeView, isUIVisible, toggleUIVisibility } = useQuranStore();
+  const { activeView } = useQuranNavigationStore();
+  const { isUIVisible, toggleUIVisibility } = useQuranSettingsStore();
   const mainRef = useRef<HTMLDivElement>(null);
 
   // Check if we're in reading mode
@@ -53,8 +55,6 @@ export function QuranLayout({ children }: QuranLayoutProps) {
     switch (activeView) {
       case "surah-list":
         return "قائمة السور";
-      case "juz-list":
-        return "قائمة الأجزاء";
       case "search":
         return "البحث في القرآن";
       case "surah-view":

@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useQuranStore } from "@/features/quran/store/useQuranStore";
+import { useQuranNavigationStore } from "@/features/quran/store/useQuranNavigationStore";
 import { useQuranData } from "@/features/quran/hooks/useQuranData";
 import { QuranViewRouter } from "./QuranViewRouter";
 import { QuranLayout } from "../layouts/QuranLayout";
 import { useSearchParams } from "next/navigation";
 
 interface QuranContainerProps {
-  initialView?: "surah-list" | "surah-view" | "search" | "juz-list";
+  initialView?: "surah-list" | "surah-view" | "search";
   initialSurahId?: number;
   initialAyahId?: number;
 }
@@ -18,36 +18,41 @@ export function QuranContainer({
   initialSurahId,
   initialAyahId,
 }: QuranContainerProps) {
-  const quranStore = useQuranStore();
-  const { allSurahs, allJuzs } = useQuranData();
+  const { setActiveView, setActiveSurah, setActiveAyah, activeView } =
+    useQuranNavigationStore();
+  const { allSurahs } = useQuranData();
   const isInitialRender = useRef(true);
   const searchParams = useSearchParams();
 
   // Initialize store from props and URL parameters ONLY on first render
   useEffect(() => {
     if (isInitialRender.current) {
-      if (initialView) quranStore.setActiveView(initialView);
-      if (initialSurahId) quranStore.setActiveSurah(initialSurahId);
+      if (initialView) setActiveView(initialView);
+      if (initialSurahId) setActiveSurah(initialSurahId);
 
       // Check if we have an ayah parameter in the URL
       const ayahFromParams = searchParams.get("ayah");
       if (ayahFromParams) {
-        quranStore.setActiveAyah(parseInt(ayahFromParams, 10));
+        setActiveAyah(parseInt(ayahFromParams, 10));
       } else if (initialAyahId) {
-        quranStore.setActiveAyah(initialAyahId);
+        setActiveAyah(initialAyahId);
       }
 
       isInitialRender.current = false;
     }
-  }, [initialView, initialSurahId, initialAyahId, quranStore, searchParams]);
+  }, [
+    initialView,
+    initialSurahId,
+    initialAyahId,
+    setActiveView,
+    setActiveSurah,
+    setActiveAyah,
+    searchParams,
+  ]);
 
   return (
     <QuranLayout>
-      <QuranViewRouter
-        activeView={quranStore.activeView}
-        surahs={allSurahs}
-        juzs={allJuzs}
-      />
+      <QuranViewRouter activeView={activeView} surahs={allSurahs} />
     </QuranLayout>
   );
 }
