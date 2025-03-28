@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { Ayah } from "../types/quran-types";
+import { Ayah } from "@/features/quran/types";
 import { searchAyahs } from "../utils/quran-search";
 
 /**
@@ -66,13 +66,11 @@ export function useQuranSearch() {
       setSearchInitiated(true);
 
       try {
-        // Using setTimeout to show loading state and avoid blocking UI
-        setTimeout(() => {
-          const results = searchAyahs(query);
-          setSearchResults(results);
-          saveRecentSearch(query);
-          setIsSearching(false);
-        }, 300);
+        const results = searchAyahs(query);
+        setSearchResults(results);
+        saveRecentSearch(query);
+        // Use a timeout only for UI feedback
+        setTimeout(() => setIsSearching(false), 300);
       } catch (e) {
         console.error("Search error:", e);
         setIsSearching(false);

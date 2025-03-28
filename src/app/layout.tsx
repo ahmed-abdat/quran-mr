@@ -1,12 +1,13 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import { uthmanicFont, uthmanicHafsFont, surahNamesFont } from "./font/fonts";
 import { GlobalProviders } from "@/components/providers/globa-provider";
+import "./globals.css";
+import { surahNamesFont, uthmanicHafsFont } from "./font/fonts";
+import { uthmanicFont } from "./font/fonts";
+import { Metadata } from "next";
+import { Toaster } from "@/components/ui/sonner"
 
 export const metadata: Metadata = {
-  title: "تطبيق القرآن",
-  description: "تطبيق قراءة القرآن بخط ورش العثماني",
+  title: "القرآن الكريم",
+  description: "تطبيق القرآن الكريم للقراءة والبحث",
 };
 
 export default function RootLayout({
@@ -20,7 +21,14 @@ export default function RootLayout({
         className={`${uthmanicFont.variable} ${uthmanicHafsFont.variable} ${surahNamesFont.variable} antialiased`}
         suppressHydrationWarning
       >
-        <GlobalProviders>{children}</GlobalProviders>
+        <GlobalProviders>
+          <Toaster 
+            position="top-center"
+            duration={2000}
+            richColors
+          />
+          {children}
+        </GlobalProviders>
       </body>
     </html>
   );

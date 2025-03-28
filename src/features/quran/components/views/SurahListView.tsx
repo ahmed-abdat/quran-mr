@@ -1,29 +1,36 @@
 "use client";
 
-import { useState } from "react";
-import { Surah } from "../../types/quran-types";
-import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { useState, useMemo } from "react";
+import { Surah } from "@/features/quran/types";
 import { cn } from "@/lib/utils";
+import { useQuranStore } from "@/features/quran/store/useQuranStore";
+import { SearchBar } from "../ui";
 
 interface SurahListViewProps {
   surahs: Surah[];
-  onSurahSelect: (surahId: number) => void;
 }
 
 /**
  * SurahListView component
  * Displays a list of all surahs with search functionality
  */
-export function SurahListView({ surahs, onSurahSelect }: SurahListViewProps) {
+export function SurahListView({ surahs }: SurahListViewProps) {
   const [searchQuery, setSearchQuery] = useState("");
+  const quranStore = useQuranStore();
 
   // Filter surahs based on search query
-  const filteredSurahs = surahs.filter(
-    (surah) =>
-      surah.name_arabic.includes(searchQuery) ||
-      surah.id.toString().includes(searchQuery)
-  );
+  const filteredSurahs = useMemo(() => {
+    return surahs.filter(
+      (surah) =>
+        surah.name_arabic.includes(searchQuery) ||
+        surah.id.toString().includes(searchQuery)
+    );
+  }, [surahs, searchQuery]);
+
+  const handleSurahSelect = (surahId: number) => {
+    quranStore.setActiveSurah(surahId);
+    quranStore.setActiveView("surah-view");
+  };
 
   return (
     <div className="space-y-4">
@@ -33,17 +40,11 @@ export function SurahListView({ surahs, onSurahSelect }: SurahListViewProps) {
       </div>
 
       {/* Search box */}
-      <div className="rounded-lg border overflow-hidden">
-        <div className="relative">
-          <Input
-            placeholder="البحث عن سورة..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="border-0 pr-10 h-12 focus-visible:ring-0 text-right"
-          />
-          <Search className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
-        </div>
-      </div>
+      <SearchBar
+        value={searchQuery}
+        onChange={setSearchQuery}
+        placeholder="البحث عن سورة..."
+      />
 
       {/* Surah list - simplified clean design */}
       <div className="border rounded-lg overflow-hidden">
@@ -52,10 +53,9 @@ export function SurahListView({ surahs, onSurahSelect }: SurahListViewProps) {
             <div
               key={surah.id}
               className={cn(
-                "grid grid-cols-[auto_1fr_auto] items-center py-4 px-4 cursor-pointer hover:bg-muted/5 transition-colors",
-                surah.id === 7 && "border-l-4 border-red-500"
+                "grid grid-cols-[auto_1fr_auto] items-center py-4 px-4 cursor-pointer hover:bg-muted/5 transition-colors"
               )}
-              onClick={() => onSurahSelect(surah.id)}
+              onClick={() => handleSurahSelect(surah.id)}
             >
               {/* Left number */}
               <div className="w-8 text-center font-medium">{surah.id}</div>
@@ -70,7 +70,7 @@ export function SurahListView({ surahs, onSurahSelect }: SurahListViewProps) {
                 <div className="absolute left-0 -top-2 flex flex-col items-end">
                   <span className="text-xs text-muted-foreground">آياتها</span>
                   <span className="text-sm font-medium">
-                    {surah.ayahs.length}
+                    {surah.verses_count}
                   </span>
                 </div>
               </div>

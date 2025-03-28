@@ -1,5 +1,5 @@
 import quranData from "@/data/quran.json";
-import { Ayah, Surah, QuranData } from "../types/quran-types";
+import { Ayah, Surah, QuranData } from "@/features/quran/types";
 
 /**
  * Converts the raw Quran data into a more structured format organized by surahs

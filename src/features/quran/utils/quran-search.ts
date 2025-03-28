@@ -1,4 +1,4 @@
-import { Ayah, Surah } from "../types/quran-types";
+import { Ayah, Surah } from "@/features/quran/types";
 import { getStructuredQuranData } from "./quran-data";
 
 /**

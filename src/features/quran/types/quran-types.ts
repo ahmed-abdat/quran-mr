@@ -1,7 +1,10 @@
 /**
- * Type definitions for the Quran data structures
+ * Core data structure types for the Quran application
  */
 
+/**
+ * Represents a single ayah (verse) in the Quran
+ */
 export interface Ayah {
   id: number;
   sura_no: number;
@@ -11,10 +14,12 @@ export interface Ayah {
   aya_no: number;
   aya_text: string;
   aya_text_emlaey?: string;
-  translation?: string;
-  footnotes?: string[];
+  juz?: number;
 }
 
+/**
+ * Represents a surah (chapter) in the Quran
+ */
 export interface Surah {
   id: number;
   name_arabic: string;
@@ -26,19 +31,51 @@ export interface Surah {
   ayahs: Ayah[];
 }
 
+/**
+ * Represents a juz (part) of the Quran
+ */
+export interface Juz {
+  id: number;
+  name_arabic: string;
+  startSurah: number;
+  startAyah: number;
+  endSurah: number;
+  endAyah: number;
+  page: number;
+}
+
+/**
+ * Complete Quran data structure
+ */
 export interface QuranData {
   surahs: Surah[];
   ayahs: Ayah[];
+  juzs?: Juz[];
 }
 
-export type QuranAction =
-  | { type: "NAVIGATE_TO_SURAH"; payload: { surahId: number } }
-  | { type: "NAVIGATE_TO_AYAH"; payload: { surahId: number; ayahId: number } }
-  | { type: "NAVIGATE_TO_SEARCH" }
-  | { type: "NAVIGATE_TO_SURAH_LIST" }
-  | { type: "SET_FONT_SIZE"; payload: number }
-  | { type: "SET_VIEW_MODE"; payload: string }
-  | { type: "SET_CURRENT_PAGE"; payload: number }
-  | { type: "TOGGLE_TRANSLATION" }
-  | { type: "SEARCH"; payload: string }
-  | { type: "SET_SEARCH_RESULTS"; payload: Ayah[] };
+/**
+ * UI and Navigation types
+ */
+
+/**
+ * Available view modes in the Quran application
+ */
+export type QuranView =
+  | "surah-list"
+  | "surah-view"
+  | "search"
+  | "juz-list"
+  | "settings";
+
+/**
+ * Available reading view modes
+ */
+export type ReadingMode = "page" | "surah" | "juz" | "continuous";
+
+/**
+ * Settings for Quran display
+ */
+export interface QuranSettings {
+  fontSize: number;
+  readingMode: ReadingMode;
+}

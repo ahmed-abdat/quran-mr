@@ -1,6 +1,6 @@
 "use client";
 
-import { ThemeProvider } from "@/components/ThemeProvider";
+import { ThemeProvider } from "@/components/theme-provider";
 
 interface GlobalProvidersProps {
   children: React.ReactNode;
@@ -8,8 +8,19 @@ interface GlobalProvidersProps {
 
 /**
  * Global providers wrapper component
- * Wraps the application with all necessary providers
+ * Wraps the application with all necessary providers:
+ * - ThemeProvider: Handles light/dark mode theming
+ * Add more providers here as needed
  */
 export function GlobalProviders({ children }: GlobalProvidersProps) {
-  return <ThemeProvider>{children}</ThemeProvider>;
+  return (
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
+      {children}
+    </ThemeProvider>
+  );
 }

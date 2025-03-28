@@ -1,8 +1,8 @@
 import { Metadata } from "next";
-import { QuranContainer } from "@/features/quran/components/QuranContainer";
+import { QuranContainer } from "@/features/quran/components/containers/QuranContainer";
 
 export const metadata: Metadata = {
-  title: "القرآن الكريم | The Holy Quran",
+  title: "القرآ ن الكريم | The Holy Quran",
   description: "تصفح القرآن الكريم بطريقة سهلة وبسيطة",
 };
 

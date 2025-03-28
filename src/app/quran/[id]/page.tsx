@@ -1,10 +1,10 @@
 import { Metadata } from "next";
-import { QuranContainer } from "@/features/quran/components/QuranContainer";
+import { QuranContainer } from "@/features/quran/components/containers/QuranContainer";
 import { getAllSurahs } from "@/features/quran/utils/quran-data";
 import { notFound } from "next/navigation";
 
-type Params = Promise<{ id: string }>
-type SearchParams = Promise<{ ayah?: string }>
+type Params = Promise<{ id: string }>;
+type SearchParams = Promise<{ ayah?: string }>;
 
 interface SurahPageProps {
   params: Params;
@@ -33,7 +33,10 @@ export async function generateMetadata({
   };
 }
 
-export default async function SurahPage({ params, searchParams }: SurahPageProps) {
+export default async function SurahPage({
+  params,
+  searchParams,
+}: SurahPageProps) {
   const { id } = await params;
   const { ayah } = await searchParams;
   const surahId = parseInt(id);
@@ -46,7 +49,7 @@ export default async function SurahPage({ params, searchParams }: SurahPageProps
 
   return (
     <QuranContainer
-      initialView="surah"
+      initialView="surah-view"
       initialSurahId={surahId}
       initialAyahId={ayahId}
     />
