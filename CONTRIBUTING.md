@@ -32,7 +32,7 @@ Thank you for your interest in contributing to the Quran MR! This guide will hel
 
 - Check our [Issues](https://github.com/ahmed-abdat/quran-mr/issues)
 - Look for `good first issue` labels
-- Ask questions in [Discussions](https://github.com/ahmed-abdat/quran-mr/discussions)
+- Ask questions on [WhatsApp](https://wa.me/22242049074)
 
 ### 2. Make Your Changes
 
@@ -213,7 +213,7 @@ docs: update contributing guide
 - Update documentation when needed
 - Respond to review comments promptly
 - Be patient and respectful
-- Ask questions if unsure
+- Ask questions on WhatsApp if unsure
 - Follow the project's coding standards
 
 ## 🚫 Common Mistakes to Avoid
@@ -231,7 +231,7 @@ docs: update contributing guide
 
 Thank you for helping make the Quran MR better! ❤️
 
-Need help? Join our [Discussions](https://github.com/ahmed-abdat/quran-mr/discussions)
+Need help? Join our [WhatsApp Support Group](https://wa.me/22242049074)
 
 [Live Demo](https://qurane-mr.vercel.app/) | [Report Bug](https://github.com/ahmed-abdat/quran-mr/issues)
 
