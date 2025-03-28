@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useTheme } from "@/components/ThemeProvider";
+import { useTheme } from "next-themes";
 
 // Available view modes for the Quran
 export type QuranViewMode = "continuous" | "carousel";
