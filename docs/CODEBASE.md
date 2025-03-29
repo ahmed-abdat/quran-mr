@@ -80,6 +80,36 @@ export function MushafLayout({ children }: { children: React.ReactNode }) {
 }
 ```
 
+## Text Highlighting
+
+### 1. Safe Text Highlighting
+
+```typescript
+// features/quran/utils/text-highlight.ts
+interface TextSegment {
+  text: string;
+  isHighlighted: boolean;
+}
+
+export function highlightTextSafely(
+  text: string,
+  query: string
+): TextSegment[] {
+  // Safely highlights text without using dangerouslySetInnerHTML
+  // Returns array of text segments with highlight information
+}
+```
+
+### 2. Font Management
+
+```typescript
+// features/quran/utils/font-utils.ts
+export function getFontClass(fontType: string): string {
+  // Returns appropriate font class based on font type
+  // Supports multiple Uthmanic font variations
+}
+```
+
 ## State Management
 
 ### 1. Navigation Store
@@ -102,13 +132,64 @@ interface MushafNavigationState {
 interface MushafSettingsState {
   fontSize: number;
   displayMode: "separate" | "continuous";
+  fontType: string;
   isUIVisible: boolean;
   theme: "light" | "dark";
   // Actions
   setFontSize: (size: number) => void;
+  setFontType: (type: string) => void;
   toggleDisplayMode: () => void;
   toggleUIVisibility: () => void;
   setTheme: (theme: "light" | "dark") => void;
+}
+```
+
+### 3. Search Store
+
+```typescript
+interface QuranSearchState {
+  query: string;
+  results: SearchResult[];
+  isLoading: boolean;
+  // Actions
+  setQuery: (query: string) => void;
+  setResults: (results: SearchResult[]) => void;
+  setIsLoading: (isLoading: boolean) => void;
+}
+```
+
+## Component Architecture
+
+### 1. SurahMushafView
+
+```typescript
+// features/quran/components/views/SurahMushafView.tsx
+interface SurahMushafViewProps {
+  surah: Surah;
+}
+
+export function SurahMushafView({ surah }: SurahMushafViewProps) {
+  // Displays complete surah with:
+  // - Adaptive layout (separate/continuous modes)
+  // - Text highlighting for search results
+  // - Smooth scrolling to ayahs
+  // - Reading mode optimizations
+}
+```
+
+### 2. Basmala
+
+```typescript
+// features/quran/components/ui/Basmala.tsx
+interface BasmalaProps {
+  surahId: number;
+}
+
+export function Basmala({ surahId }: BasmalaProps) {
+  // Displays Bismillah with:
+  // - Conditional rendering based on surah
+  // - Font type support
+  // - Responsive styling
 }
 ```
 
