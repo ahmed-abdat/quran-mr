@@ -29,24 +29,26 @@ features/mushaf/
 │   │   ├── NavigationBar.tsx       # Top navigation
 │   │   └── BottomBar.tsx          # Bottom navigation
 │   ├── views/
-│   │   ├── SurahView.tsx          # Surah reading view
+│   │   ├── SurahMushafView.tsx    # Enhanced Surah reading view
 │   │   ├── SearchView.tsx         # Search interface
 │   │   └── SettingsView.tsx       # Settings panel
 │   └── ui/
-│       ├── AyahRenderer.tsx        # Ayah display
+│       ├── AyahRenderer.tsx        # Ayah display with highlighting
 │       ├── SurahHeader.tsx        # Surah information
-│       └── Basmala.tsx           # Bismillah display
+│       └── Basmala.tsx           # Bismillah display with font support
 ├── hooks/
 │   ├── useMushafData.ts          # Data management
 │   ├── useMushafSearch.ts        # Search functionality
 │   └── useMushafNavigation.ts    # Navigation control
 ├── store/
 │   ├── useMushafNavigationStore.ts # Navigation state
-│   ├── useMushafSettingsStore.ts   # Settings state
+│   ├── useMushafSettingsStore.ts   # Settings & font state
 │   └── useQuranSearchStore.ts     # Search state
 ├── utils/
-│   ├── mushaf-data.ts            # Data processing
-│   └── mushaf-search.ts          # Search utilities
+│   ├── text-highlight.ts         # Safe text highlighting
+│   ├── font-utils.ts            # Font management
+│   ├── mushaf-data.ts           # Data processing
+│   └── mushaf-search.ts         # Search utilities
 └── types/
     └── index.ts                  # Type definitions
 ```
@@ -141,68 +143,73 @@ We plan to implement features specifically for the Mauritanian community:
  */
 ```
 
+### SurahMushafView
+
+```typescript
+/**
+ * Enhanced Surah reading view with:
+ * - Safe text highlighting without dangerouslySetInnerHTML
+ * - Adaptive layout (separate/continuous modes)
+ * - Font type support
+ * - Smooth scrolling and animations
+ * - Search result highlighting
+ */
+interface SurahMushafViewProps {
+  surah: Surah;
+}
+```
+
+### Text Highlighting
+
+```typescript
+/**
+ * Safe text highlighting utility
+ * Features:
+ * - No dangerouslySetInnerHTML
+ * - Segment-based highlighting
+ * - Search term matching
+ * - Clean text processing
+ */
+interface TextSegment {
+  text: string;
+  isHighlighted: boolean;
+}
+```
+
+### Font Management
+
+```typescript
+/**
+ * Font utilities for Uthmanic script
+ * Features:
+ * - Multiple font variations
+ * - Dynamic font loading
+ * - Responsive font sizing
+ * - Font class management
+ */
+function getFontClass(fontType: string): string;
+```
+
+### Basmala Component
+
+```typescript
+/**
+ * Enhanced Basmala component
+ * Features:
+ * - Conditional rendering
+ * - Font type support
+ * - Responsive design
+ * - Optimized performance
+ */
+interface BasmalaProps {
+  surahId: number;
+}
+```
+
 ## State Management
 
 ### Navigation Store
 
-```typescript
-interface MushafNavigationState {
-  activeView: MushafView;
-  activeSurahId?: number;
-  activeAyahId?: number;
-  // Actions
-  setActiveView: (view: MushafView) => void;
-  setActiveSurah: (id?: number) => void;
-  setActiveAyah: (id?: number) => void;
-}
 ```
 
-## Community Guidelines
-
-1. **Code Contributions**
-
-   - Follow Arabic naming conventions
-   - Add bilingual comments (Arabic/English)
-   - Consider local user needs
-
-2. **Feature Requests**
-
-   - Focus on community benefits
-   - Consider local usage patterns
-   - Maintain accessibility
-
-3. **Documentation**
-   - Keep documentation bilingual
-   - Include local context
-   - Use clear examples
-
-## Getting Help
-
-- 📧 Email: support@quran-mr.com
-- 💬 WhatsApp: [Community Support](https://wa.me/22242049074)
-- 🌐 Website: [qurane-mr.vercel.app](https://qurane-mr.vercel.app)
-
-## Join Our Community
-
-We welcome all contributions from the Mauritanian community and beyond. Whether you're a developer, designer, scholar, or enthusiast, there's a place for you in our project.
-
-1. **Start Contributing**
-
-   - Check our [Issues](https://github.com/ahmed-abdat/quran-mr/issues)
-   - Join our [Discussions](https://github.com/ahmed-abdat/quran-mr/discussions)
-   - Contact us on [WhatsApp](https://wa.me/22242049074)
-
-2. **Share Your Knowledge**
-   - Help others learn
-   - Share your expertise
-   - Suggest improvements
-
-Together, we can build a better platform for our community. Join us in this rewarding journey! 🌟
-
----
-
-<div align="center">
-
-Built with ❤️ by the Mauritanian community, for the Ummah.
-
-</div>
+```
