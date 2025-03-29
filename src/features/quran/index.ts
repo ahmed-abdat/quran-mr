@@ -38,6 +38,7 @@ export { AyahRenderer } from "./components/ui/AyahRenderer";
 export { Basmala } from "./components/ui/Basmala";
 export { SearchBar } from "./components/ui/SearchBar";
 export { SurahHeader } from "./components/ui/SurahHeader";
+export { SurahNavigation } from "./components/ui/SurahNavigation";
 
 // Hooks
 export { useMushafData } from "./hooks/useMushafData";

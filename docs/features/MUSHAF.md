@@ -35,7 +35,8 @@ features/mushaf/
 │   └── ui/
 │       ├── AyahRenderer.tsx        # Ayah display with highlighting
 │       ├── SurahHeader.tsx        # Surah information
-│       └── Basmala.tsx           # Bismillah display with font support
+│       ├── Basmala.tsx           # Bismillah display with font support
+│       └── SurahNavigation.tsx    # Surah navigation with auto-hide
 ├── hooks/
 │   ├── useMushafData.ts          # Data management
 │   ├── useMushafSearch.ts        # Search functionality
@@ -205,6 +206,87 @@ interface BasmalaProps {
   surahId: number;
 }
 ```
+
+### Surah Navigation Component
+
+```typescript
+/**
+ * SurahNavigation component
+ *
+ * Provides minimal navigation controls for moving between surahs with focus mode support.
+ * Features:
+ * - Previous/next surah navigation
+ * - Auto-hiding UI based on mouse movement
+ * - Keyboard navigation (ArrowLeft/ArrowRight)
+ * - Focus mode compatibility
+ */
+interface SurahNavigationProps {
+  surah: Surah;
+}
+```
+
+#### Features
+
+- **Minimal UI**: Clean, floating navigation bar that doesn't distract from reading
+- **Auto-hide Behavior**: Automatically hides when inactive to maximize reading space
+- **RTL Navigation Support**: Right-to-left navigation compliant with Arabic reading direction
+- **Keyboard Shortcuts**: Support for keyboard navigation (Arrow keys)
+- **Focus Mode Compatibility**: Respects the global UI visibility settings
+- **Visual Feedback**: Hover and focus states for better user experience
+- **Contextual Information**: Shows current surah position and adjacent surah names
+
+#### Implementation
+
+The SurahNavigation component is implemented as a UI component that:
+
+1. Shows the current surah's position out of 114
+2. Provides navigation buttons for previous and next surahs
+3. Displays tooltips with adjacent surah names
+4. Automatically hides after 2 seconds of inactivity
+5. Reappears on mouse movement
+6. Supports keyboard shortcuts for navigation
+
+#### Usage
+
+```tsx
+import { SurahNavigation } from "@/features/quran/components/ui/SurahNavigation";
+
+<SurahNavigation surah={currentSurah} />;
+```
+
+#### Technical Details
+
+- **State Management**
+
+  - Uses `useMushafNavigationStore` for surah navigation
+  - Uses `useMushafSettingsStore` to respect UI visibility settings
+  - Uses `useMushafData` to retrieve adjacent surah information
+
+- **Keyboard Navigation**
+
+  - **Right Arrow** (→): In RTL mode, navigates to the previous surah
+  - **Left Arrow** (←): In RTL mode, navigates to the next surah
+  - Skips navigation when focus is on input elements
+
+- **Styling**
+
+  - Uses a semi-transparent, backdrop-blurred container
+  - Implements smooth transitions and subtle hover effects
+  - Maintains a consistent visual language with other UI components
+  - Applies responsive sizing and spacing
+
+- **Accessibility**
+
+  - Provides tooltips for navigation buttons
+  - Uses ARIA attributes for better screen reader support
+  - Supports keyboard navigation
+  - Maintains sufficient contrast for text readability
+
+- **Future Enhancements**
+  - Jump to Specific Surah: Add a dropdown or quick-access menu
+  - Remember Position: Save and restore reading position within a surah
+  - Enhanced Gestures: Add swipe gestures for touch devices
+  - Progress Indicator: Show reading progress through the current surah
 
 ## State Management
 

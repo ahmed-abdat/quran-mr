@@ -109,7 +109,7 @@ export function MushafLayout({ children }: MushafLayoutProps) {
       <main
         ref={mainRef}
         className={cn(
-          "flex-1 container px-4 max-w-3xl mx-auto transition-all duration-300",
+          "flex-1 container px-2 max-w-3xl mx-auto transition-all duration-300",
           isSettingsView ? "pt-6" : "pt-4"
         )}
         onClick={handleContentClick}

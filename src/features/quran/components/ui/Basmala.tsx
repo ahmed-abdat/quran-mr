@@ -30,7 +30,7 @@ export function Basmala({ surahId }: BasmalaProps) {
           "leading-8 tracking-wider",
           "p-2 rounded-md",
           "bg-foreground/[0.01] dark:bg-foreground/[0.02]",
-          "mb-5"
+          "mb-0"
         )}
       >
         بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ

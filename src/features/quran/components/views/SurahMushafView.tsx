@@ -7,6 +7,7 @@ import { useQuranSearchStore } from "@/features/quran/store/useQuranSearchStore"
 import { AyahRenderer } from "../ui/AyahRenderer";
 import { SurahHeader } from "../ui/SurahHeader";
 import { Basmala } from "../ui/Basmala";
+import { SurahNavigation } from "../ui/SurahNavigation";
 import { cn } from "@/lib/utils";
 import { getFontClass } from "@/features/quran/utils/font-utils";
 import { useEffect, useRef } from "react";
@@ -126,7 +127,7 @@ export function SurahMushafView({ surah }: SurahMushafViewProps) {
         <div
           className={cn(
             "max-w-4xl mx-auto",
-            "pt-4 px-4 rounded-lg transition-colors",
+            "pt-2 rounded-lg transition-colors",
             "bg-gradient-to-b from-background/70 to-background/30",
             isReadingMode && [
               "bg-background/50 shadow-sm backdrop-blur-sm",
@@ -173,6 +174,9 @@ export function SurahMushafView({ surah }: SurahMushafViewProps) {
           </div>
         </div>
       )}
+
+      {/* Surah Navigation */}
+      <SurahNavigation surah={surah} />
     </div>
   );
 }

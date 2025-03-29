@@ -45,7 +45,7 @@ export function AyahRenderer({ ayah, searchQuery }: AyahRendererProps) {
   return (
     <div
       className={cn(
-        "p-4 rounded-lg transition-all duration-300 relative",
+        "rounded-lg transition-all duration-300 relative",
         isReadingMode && [
           "mb-4",
           "bg-background/50 backdrop-blur-sm",
