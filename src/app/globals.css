@@ -84,194 +84,27 @@
   }
 }
 
-/* Quran Font Classes */
+/* Essential font classes */
 .font-arabic {
-  font-family: var(--font-uthmanic);
+  font-family: var(--font-warsh);
   letter-spacing: 0.01em;
   word-spacing: 0.1em;
 }
 
-/* Enhanced Arabic text rendering */
-.quran-text {
-  direction: rtl;
-  text-align: justify;
-  line-height: 2;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Enhance scrollbar for better UX in Quran reading */
+/* Simple scrollbar styling */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  @apply w-2 h-2;
 }
 
 ::-webkit-scrollbar-track {
-  background: hsl(var(--background));
+  @apply bg-background;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted-foreground) / 0.3);
-  border-radius: 4px;
+  @apply bg-muted-foreground/30 rounded-sm hover:bg-muted-foreground/50;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground) / 0.5);
-}
-
-/* Quran Mushaf Styling */
-.quran-mushaf {
-  background-color: #ffffff;
-  background-image: linear-gradient(
-    rgba(233, 228, 221, 0.05) 1px,
-    transparent 1px
-  );
-  background-size: 100% 1.8em;
-  box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px;
-  border-radius: 4px;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.dark .quran-mushaf {
-  background-color: hsl(var(--card));
-  background-image: linear-gradient(
-    rgba(255, 255, 255, 0.02) 1px,
-    transparent 1px
-  );
-}
-
-.mushaf-text {
-  line-height: 2.2;
-  word-spacing: 0.04em;
-  letter-spacing: 0;
-  text-rendering: optimizeLegibility;
-  text-align: center;
-  width: 100%;
-  padding: 0 1rem;
-  color: rgba(0, 0, 0, 0.85);
-}
-
-@media (min-width: 768px) {
-  .mushaf-text {
-    max-width: 85%;
-    margin: 0 auto;
-  }
-}
-
-/* Quran Word Styling */
-.quran-word {
-  display: inline-block;
-  margin: 0 0.08em;
-  padding: 0 0.02em;
-  line-height: 2;
-}
-
-.active-quran-word {
-  background-color: rgba(var(--primary-rgb, 0 0 0) / 0.08);
-  border-radius: 0.15rem;
-}
-
-.quran-text-container {
-  width: 100%;
-  text-align: center;
-  line-height: 2.2;
-}
-
-@media (min-width: 768px) {
-  .quran-text-container {
-    max-width: 85%;
-    margin: 0 auto;
-  }
-}
-
-@media (max-width: 480px) {
-  .quran-text-container {
-    padding: 0 0.5rem;
-    word-spacing: 0.03em;
-  }
-
-  .quran-word {
-    margin: 0 0.05em;
-  }
-}
-
-/* Verse Number Styling - Traditional Arabic Style */
-.ayah-number {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.6em;
-  width: 1.8em;
-  height: 1.8em;
-  vertical-align: middle;
-  font-family: var(--font-uthmanic);
-  position: relative;
-  color: rgba(0, 0, 0, 0.7);
-  font-weight: normal;
-}
-
-.dark .ayah-number {
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.ayah-number::before {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='currentColor' d='M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2m0 2a8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8 8 8 0 0 0-8-8Z'/%3E%3C/svg%3E");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  opacity: 0.6;
-}
-
-/* Active Ayah Highlight */
-.active-ayah {
-  color: theme("colors.primary.DEFAULT");
-  background-color: rgba(var(--primary-rgb) / 0.1);
-  border-radius: 0.25rem;
-  padding: 0.25rem;
-  display: inline-block;
-  transition: all 0.3s ease;
-}
-
-/* Enhanced typography for the mushaf */
-.font-arabic .mushaf-text {
-  text-align-last: justify;
-  line-height: 2.4;
-}
-
-/* Bismillah styling */
-.bismillah {
-  font-size: 1.2em;
-  opacity: 0.85;
-  margin-bottom: 1.2rem;
-  line-height: 2;
-  font-family: var(--font-uthmanic);
-  letter-spacing: 0.05em;
-  background-color: rgba(0, 0, 0, 0.01);
-  padding: 0.5rem;
-  border-radius: 4px;
-}
-
-.dark .bismillah {
-  background-color: rgba(255, 255, 255, 0.02);
-}
-
-.ayah-container {
-  display: inline;
-  text-align-last: right;
-  margin-bottom: 0.5rem;
-}
-
-.active-ayah-container .quran-word {
-  background-color: rgba(var(--primary-rgb, 0 0 0) / 0.08);
-  border-radius: 0.15rem;
-}
-
+/* Essential animation for highlight pulse */
 @keyframes highlightPulse {
   0% {
     box-shadow: 0 0 0 0 rgba(var(--primary) / 0.2);

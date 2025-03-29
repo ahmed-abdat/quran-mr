@@ -1,8 +1,10 @@
 "use client";
 
-import { Surah } from "@/features/quran/types";
+import { Surah, FontType } from "@/features/quran/types";
 import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
+import { useMushafSettingsStore } from "@/features/quran/store/useMushafSettingsStore";
+import { getFontClass } from "@/features/quran/utils/font-utils";
 
 interface SurahHeaderProps {
   surah: Surah;
@@ -29,6 +31,8 @@ const containerVariants = cva(
  * Displays a consistent header for a Surah with optional detailed information
  */
 export function SurahHeader({ surah, showExtraInfo = true }: SurahHeaderProps) {
+  const { fontType } = useMushafSettingsStore();
+
   return (
     <div className="text-center">
       <div
@@ -63,7 +67,10 @@ export function SurahHeader({ surah, showExtraInfo = true }: SurahHeaderProps) {
             >
               <span>{surah.name_english}</span>
               <span className="inline-block w-1 h-1 rounded-full bg-muted-foreground/50"></span>
-              <span className="font-medium" dir="rtl">
+              <span
+                className={cn(getFontClass(fontType), "font-medium")}
+                dir="rtl"
+              >
                 {surah.verses_count} آية
               </span>
             </div>

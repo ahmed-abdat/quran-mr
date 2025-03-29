@@ -4,52 +4,67 @@ import { Ayah } from "@/features/quran/types";
 import { useMushafNavigationStore } from "@/features/quran/store/useMushafNavigationStore";
 import { useMushafSettingsStore } from "@/features/quran/store/useMushafSettingsStore";
 import { cn } from "@/lib/utils";
+import { getFontClass } from "@/features/quran/utils/font-utils";
+import { useQuranSearchStore } from "@/features/quran/store/useQuranSearchStore";
+import { highlightTextSafely } from "@/features/quran/utils/text-highlight";
 
 interface AyahRendererProps {
   ayah: Ayah;
-  highlightedText?: string;
+  searchQuery?: string;
 }
 
 /**
  * AyahRenderer component
  * Renders a single Ayah with optimized styling for focused reading
- * and enhanced highlighting effects
+ * and enhanced highlighting effects using safe text highlighting
  */
-export function AyahRenderer({ ayah, highlightedText }: AyahRendererProps) {
+export function AyahRenderer({ ayah, searchQuery }: AyahRendererProps) {
   const { activeView } = useMushafNavigationStore();
-  const { fontSize } = useMushafSettingsStore();
+  const { fontSize, fontType } = useMushafSettingsStore();
   const isReadingMode = activeView === "surah-view";
 
-  // Handle rendering HTML content (for highlighted text in search)
+  // Handle rendering text with highlights
   const renderTextWithHighlight = () => {
-    if (highlightedText) {
-      return (
-        <span
-          dangerouslySetInnerHTML={{ __html: highlightedText }}
-          className="transition-colors duration-300"
-        />
-      );
-    }
-    return <>{ayah.aya_text}</>;
+    if (!searchQuery) return ayah.aya_text;
+
+    const segments = highlightTextSafely(ayah.aya_text, searchQuery);
+
+    return segments.map((segment, index) => (
+      <span
+        key={index}
+        className={cn(
+          "transition-colors duration-300",
+          segment.isHighlighted && "bg-primary/10 text-primary rounded-[1px]"
+        )}
+      >
+        {segment.text}
+      </span>
+    ));
   };
 
   return (
     <div
       className={cn(
         "p-4 rounded-lg transition-all duration-300 relative",
-        isReadingMode
-          ? "mb-4 bg-background/50 backdrop-blur-sm shadow-sm border border-muted/10 hover:shadow-md"
-          : "hover:bg-muted/5"
+        isReadingMode && [
+          "mb-4",
+          "bg-background/50 backdrop-blur-sm",
+          "shadow-sm border border-muted/10",
+          "hover:shadow-md",
+        ],
+        !isReadingMode && "hover:bg-muted/5"
       )}
     >
       <p
         className={cn(
-          "font-arabic text-right leading-relaxed transition-colors",
-          isReadingMode && "tracking-wide"
+          getFontClass(fontType),
+          "text-right",
+          "leading-[1.8]",
+          "tracking-wide",
+          "text-rendering-optimizeLegibility antialiased"
         )}
         style={{
           fontSize: `${fontSize}px`,
-          lineHeight: isReadingMode ? "1.8" : "inherit",
         }}
       >
         {renderTextWithHighlight()}

@@ -1,17 +1,20 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { FontType } from "@/features/quran/types";
 
 interface MushafSettingsState {
   // Display settings
   fontSize: number;
   displayMode: "separate" | "continuous";
   isUIVisible: boolean;
+  fontType: FontType;
 
   // Actions
   increaseFontSize: () => void;
   decreaseFontSize: () => void;
   toggleDisplayMode: () => void;
   toggleUIVisibility: () => void;
+  setFontType: (font: FontType) => void;
 }
 
 export const useMushafSettingsStore = create<MushafSettingsState>()(
@@ -21,6 +24,7 @@ export const useMushafSettingsStore = create<MushafSettingsState>()(
       fontSize: 24,
       displayMode: "separate",
       isUIVisible: true,
+      fontType: "warsh",
 
       // Font size actions
       increaseFontSize: () =>
@@ -44,6 +48,12 @@ export const useMushafSettingsStore = create<MushafSettingsState>()(
       toggleUIVisibility: () =>
         set((state) => ({
           isUIVisible: !state.isUIVisible,
+        })),
+
+      // Font type action
+      setFontType: (font: FontType) =>
+        set(() => ({
+          fontType: font,
         })),
     }),
     {

@@ -1,9 +1,19 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Toggle } from "@/components/ui/toggle";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator";
 import { useMushafNavigationStore } from "@/features/quran/store/useMushafNavigationStore";
 import { useMushafSettingsStore } from "@/features/quran/store/useMushafSettingsStore";
-import { useState, useEffect } from "react";
+import { FontType } from "@/features/quran/types";
+import {
+  getFontTypeName,
+  getFontClass,
+  getAvailableFontTypes,
+} from "@/features/quran/utils/font-utils";
+import { useCallback } from "react";
 import {
   Check,
   Rows,
@@ -13,10 +23,218 @@ import {
   ChevronRight,
   Moon,
   Sun,
+  Type,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { toast } from "sonner";
 import { useTheme } from "next-themes";
+import { cn } from "@/lib/utils";
+
+/**
+ * FontSizeControl component for adjusting text size
+ */
+function FontSizeControl({
+  fontSize,
+  fontType,
+  onIncrease,
+  onDecrease,
+}: {
+  fontSize: number;
+  fontType: FontType;
+  onIncrease: () => void;
+  onDecrease: () => void;
+}) {
+  return (
+    <>
+      <CardHeader className="pb-2 border-b">
+        <CardTitle className="text-lg">حجم الخط</CardTitle>
+      </CardHeader>
+      <CardContent className="p-4">
+        <div className="flex flex-col space-y-4">
+          <div className="flex items-center justify-between bg-muted/30 rounded-lg p-4">
+            <Button
+              onClick={onDecrease}
+              variant="outline"
+              size="icon"
+              disabled={fontSize <= 18}
+              className="h-8 w-8 rounded-full"
+            >
+              <Minus className="h-3 w-3" />
+            </Button>
+            <div className="flex flex-col items-center">
+              <span className="text-2xl font-medium tabular-nums">
+                {fontSize}
+              </span>
+              <span className="text-xs text-muted-foreground">حجم الخط</span>
+            </div>
+            <Button
+              onClick={onIncrease}
+              variant="outline"
+              size="icon"
+              disabled={fontSize >= 40}
+              className="h-8 w-8 rounded-full"
+            >
+              <Plus className="h-3 w-3" />
+            </Button>
+          </div>
+
+          <div className="bg-muted/20 rounded-lg p-3">
+            <p
+              className={cn(getFontClass(fontType), "text-center")}
+              style={{ fontSize: `${fontSize}px` }}
+            >
+              بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+            </p>
+          </div>
+        </div>
+      </CardContent>
+    </>
+  );
+}
+
+/**
+ * FontTypeSelector component for choosing font type
+ */
+function FontTypeSelector({
+  currentFont,
+  onFontChange,
+}: {
+  currentFont: FontType;
+  onFontChange: (font: FontType) => void;
+}) {
+  const fontTypes = getAvailableFontTypes();
+
+  return (
+    <>
+      <CardHeader className="pb-2 border-b">
+        <CardTitle className="text-lg">نوع الخط</CardTitle>
+      </CardHeader>
+      <CardContent className="p-4">
+        <div className="grid grid-cols-1 gap-2">
+          {fontTypes.map((font) => (
+            <Toggle
+              key={font}
+              variant="outline"
+              size="lg"
+              pressed={currentFont === font}
+              onPressedChange={() => onFontChange(font)}
+              className={cn(
+                "w-full justify-start",
+                currentFont === font &&
+                  "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"
+              )}
+            >
+              <Type className="h-4 w-4 mr-2 opacity-90" />
+              {getFontTypeName(font)}
+              {currentFont === font && (
+                <Check className="h-4 w-4 ms-auto opacity-90" />
+              )}
+            </Toggle>
+          ))}
+        </div>
+      </CardContent>
+    </>
+  );
+}
+
+/**
+ * DisplayModeSelector component for choosing display mode
+ */
+function DisplayModeSelector({
+  displayMode,
+  onToggleMode,
+}: {
+  displayMode: "separate" | "continuous";
+  onToggleMode: () => void;
+}) {
+  return (
+    <>
+      <CardHeader className="pb-2 border-b">
+        <CardTitle className="text-lg">طريقة عرض الآيات</CardTitle>
+      </CardHeader>
+      <CardContent className="p-4">
+        <Tabs
+          defaultValue={displayMode}
+          className="w-full"
+          dir="rtl"
+          onValueChange={(value) => {
+            if (value !== displayMode) {
+              onToggleMode();
+            }
+          }}
+        >
+          <TabsList className="grid grid-cols-2 w-full mb-2">
+            <TabsTrigger value="continuous">
+              <AlignJustify className="h-4 w-4 ml-2" />
+              عرض متصل
+            </TabsTrigger>
+            <TabsTrigger value="separate">
+              <Rows className="h-4 w-4 ml-2" />
+              عرض منفصل
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent
+            value="continuous"
+            className="bg-muted/20 text-sm rounded-lg p-3 mt-2"
+          >
+            عرض متواصل للآيات كنص مستمر، مناسب للقراءة المتواصلة ويشبه طريقة عرض
+            المصحف التقليدي
+          </TabsContent>
+          <TabsContent
+            value="separate"
+            className="bg-muted/20 text-sm rounded-lg p-3 mt-2"
+          >
+            عرض كل آية في سطر مستقل مما يسهل القراءة وتتبع الآيات بشكل أوضح
+          </TabsContent>
+        </Tabs>
+      </CardContent>
+    </>
+  );
+}
+
+/**
+ * ThemeToggle component for selecting light/dark mode
+ */
+function ThemeToggle() {
+  const { theme, setTheme } = useTheme();
+
+  return (
+    <>
+      <CardHeader className="pb-2 border-b">
+        <CardTitle className="text-lg">المظهر</CardTitle>
+      </CardHeader>
+      <CardContent className="p-4">
+        <div className="bg-muted/30 p-3 rounded-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex flex-col">
+              <span className="font-medium">
+                {theme === "dark" ? "المظهر الداكن" : "المظهر الفاتح"}
+              </span>
+              <span className="text-xs text-muted-foreground mt-1">
+                {theme === "dark"
+                  ? "مناسب للقراءة الليلية"
+                  : "مناسب للقراءة النهارية"}
+              </span>
+            </div>
+            <Button
+              variant="outline"
+              size="icon"
+              className={cn(
+                "rounded-full w-10 h-10 border-2",
+                theme === "dark" ? "border-primary" : "border-primary/20"
+              )}
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            >
+              {theme === "dark" ? (
+                <Moon className="h-4 w-4" />
+              ) : (
+                <Sun className="h-4 w-4" />
+              )}
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </>
+  );
+}
 
 /**
  * SettingsView component
@@ -26,93 +244,21 @@ export function SettingsView() {
   const {
     fontSize,
     displayMode,
+    fontType,
     increaseFontSize,
     decreaseFontSize,
     toggleDisplayMode,
+    setFontType,
   } = useMushafSettingsStore();
 
   const { setActiveView } = useMushafNavigationStore();
-  const { theme, setTheme } = useTheme();
 
-  const [savedSettings, setSavedSettings] = useState(false);
-  const [hasChanges, setHasChanges] = useState(false);
-  const [initialSettings, setInitialSettings] = useState({
-    fontSize,
-    displayMode,
-    theme: theme || "light",
-  });
-
-  // Track changes by comparing current settings with initial settings
-  useEffect(() => {
-    const settingsChanged =
-      fontSize !== initialSettings.fontSize ||
-      displayMode !== initialSettings.displayMode ||
-      theme !== initialSettings.theme;
-    setHasChanges(settingsChanged);
-  }, [fontSize, displayMode, theme, initialSettings]);
-
-  const handleSave = () => {
-    if (!hasChanges) return;
-
-    setSavedSettings(true);
-
-    // Prepare changes summary
-    const changes = [];
-    if (fontSize !== initialSettings.fontSize) {
-      changes.push(`حجم الخط: ${initialSettings.fontSize} → ${fontSize}`);
-    }
-    if (displayMode !== initialSettings.displayMode) {
-      changes.push(
-        `طريقة العرض: ${
-          initialSettings.displayMode === "continuous" ? "متصل" : "منفصل"
-        } → ${displayMode === "continuous" ? "متصل" : "منفصل"}`
-      );
-    }
-    if (theme !== initialSettings.theme) {
-      changes.push(
-        `المظهر: ${initialSettings.theme === "dark" ? "داكن" : "فاتح"} → ${
-          theme === "dark" ? "داكن" : "فاتح"
-        }`
-      );
-    }
-
-    // Show toast with changes
-    toast.success("تم حفظ الإعدادات", {
-      description: changes.join("\n"),
-    });
-
-    // Update initial settings after save
-    setInitialSettings({
-      fontSize,
-      displayMode,
-      theme: theme || "light",
-    });
-    setHasChanges(false);
-
-    setTimeout(() => setSavedSettings(false), 2000);
-  };
-
-  const handleBackToReading = () => {
-    if (hasChanges) {
-      toast("لم يتم حفظ التغييرات", {
-        description: "اضغط على حفظ الإعدادات لحفظ التغييرات",
-      });
-      return;
-    }
+  /**
+   * Handles returning to reading view
+   */
+  const handleBackToReading = useCallback(() => {
     setActiveView("surah-view");
-  };
-
-  const handleFontSizeChange = (increase: boolean) => {
-    if (increase) {
-      increaseFontSize();
-    } else {
-      decreaseFontSize();
-    }
-  };
-
-  const handleThemeChange = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
+  }, [setActiveView]);
 
   return (
     <div className="max-w-2xl mx-auto space-y-6 pb-6">
@@ -121,129 +267,53 @@ export function SettingsView() {
         <h1 className="text-2xl font-semibold text-primary">الإعدادات</h1>
       </div>
 
-      {/* Settings sections */}
-      <div className="space-y-4 bg-card rounded-xl overflow-hidden border shadow-sm">
+      {/* Settings Card */}
+      <Card className="overflow-hidden shadow-sm">
         {/* Font Size controls */}
-        <div className="p-6 space-y-3">
-          <h2 className="text-lg font-semibold">حجم الخط</h2>
-          <div className="flex items-center justify-between bg-muted/30 rounded-lg p-4">
-            <Button
-              onClick={() => handleFontSizeChange(false)}
-              variant="ghost"
-              size="icon"
-              disabled={fontSize <= 18}
-              className="hover:bg-background/50"
-            >
-              <Minus className="h-4 w-4" />
-            </Button>
-            <div className="flex flex-col items-center">
-              <span className="text-2xl font-medium tabular-nums">
-                {fontSize}
-              </span>
-              <span className="text-xs text-muted-foreground">حجم الخط</span>
-            </div>
-            <Button
-              onClick={() => handleFontSizeChange(true)}
-              variant="ghost"
-              size="icon"
-              disabled={fontSize >= 40}
-              className="hover:bg-background/50"
-            >
-              <Plus className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
+        <FontSizeControl
+          fontSize={fontSize}
+          fontType={fontType}
+          onIncrease={increaseFontSize}
+          onDecrease={decreaseFontSize}
+        />
+
+        <Separator />
+
+        {/* Font Type selector */}
+        <FontTypeSelector currentFont={fontType} onFontChange={setFontType} />
+
+        <Separator />
 
         {/* Display Mode selector */}
-        <div className="p-6 space-y-3 border-t bg-card">
-          <h2 className="text-lg font-semibold">طريقة عرض الآيات</h2>
-          <div className="space-y-2">
-            <button
-              onClick={
-                displayMode !== "continuous" ? toggleDisplayMode : undefined
-              }
-              className={cn(
-                "w-full text-right px-4 py-3 rounded-lg transition-all",
-                "flex items-center gap-3",
-                displayMode === "continuous"
-                  ? "bg-primary text-primary-foreground"
-                  : "hover:bg-muted/50"
-              )}
-            >
-              <AlignJustify className="h-4 w-4 opacity-90" />
-              <span>عرض متصل (نص مستمر)</span>
-            </button>
-            <button
-              onClick={
-                displayMode !== "separate" ? toggleDisplayMode : undefined
-              }
-              className={cn(
-                "w-full text-right px-4 py-3 rounded-lg transition-all",
-                "flex items-center gap-3",
-                displayMode === "separate"
-                  ? "bg-primary text-primary-foreground"
-                  : "hover:bg-muted/50"
-              )}
-            >
-              <Rows className="h-4 w-4 opacity-90" />
-              <span>عرض منفصل (كل آية في سطر)</span>
-            </button>
-          </div>
-        </div>
+        <DisplayModeSelector
+          displayMode={displayMode}
+          onToggleMode={toggleDisplayMode}
+        />
+
+        <Separator />
 
         {/* Theme toggle */}
-        <div className="p-6 space-y-3 border-t bg-card">
-          <h2 className="text-lg font-semibold">المظهر</h2>
-          <button
-            onClick={handleThemeChange}
-            className="w-full text-right px-4 py-3 rounded-lg transition-all flex items-center justify-between hover:bg-muted/50"
-          >
-            <span>{theme === "dark" ? "المظهر الداكن" : "المظهر الفاتح"}</span>
-            {theme === "dark" ? (
-              <Moon className="h-4 w-4" />
-            ) : (
-              <Sun className="h-4 w-4" />
-            )}
-          </button>
-        </div>
+        <ThemeToggle />
+
+        <Separator className="my-0" />
 
         {/* About section */}
-        <div className="p-6 space-y-2 border-t bg-muted/10">
-          <h2 className="text-lg font-semibold">عن التطبيق</h2>
+        <CardContent className="p-4 bg-muted/5">
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             <span>تطبيق القرآن الكريم</span>
             <span className="font-medium">v1.0.0</span>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
-      {/* Action buttons - Now part of normal flow */}
-      <div className="bg-background/80 backdrop-blur-lg border-t py-4">
-        <div className="max-w-2xl mx-auto flex flex-col gap-2 px-4">
-          <Button
-            onClick={handleSave}
-            className="w-full"
-            variant={savedSettings ? "outline" : "default"}
-            size="lg"
-            disabled={!hasChanges}
-          >
-            {savedSettings ? (
-              <span className="flex items-center gap-2">
-                <Check className="h-4 w-4" />
-                تم الحفظ
-              </span>
-            ) : hasChanges ? (
-              "حفظ الإعدادات"
-            ) : (
-              "لا توجد تغييرات"
-            )}
-          </Button>
-
+      {/* Action buttons */}
+      <div className="mt-6 bg-background/80 backdrop-blur-sm border rounded-lg overflow-hidden">
+        <div className="max-w-2xl mx-auto flex flex-row gap-3 p-4">
           <Button
             onClick={handleBackToReading}
-            variant="ghost"
+            variant="secondary"
             size="lg"
-            className="w-full"
+            className="flex-1"
           >
             <span className="flex items-center gap-2">
               <ChevronRight className="h-4 w-4" />

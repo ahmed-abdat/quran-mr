@@ -19,8 +19,8 @@ const config: Config = {
     },
     extend: {
       fontFamily: {
-        arabic: ["var(--font-uthmanic)"],
-        "arabic-hafs": ["var(--font-uthmanic-hafs)"],
+        arabic: ["var(--font-warsh)"],
+        "arabic-qaloun": ["var(--font-qaloun)"],
         "surah-names": ["var(--font-surah-names)"],
       },
       colors: {

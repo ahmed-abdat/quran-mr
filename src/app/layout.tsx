@@ -1,9 +1,12 @@
 import { GlobalProviders } from "@/components/providers/globa-provider";
 import "./globals.css";
-import { surahNamesFont, uthmanicHafsFont } from "./font/fonts";
-import { uthmanicFont } from "./font/fonts";
+import {
+  surahNamesFont,
+  warshFont,
+  qalounFont,
+} from "./font/fonts";
 import { Metadata } from "next";
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "القرآن الكريم",
@@ -18,11 +21,11 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl" suppressHydrationWarning>
       <body
-        className={`${uthmanicFont.variable} ${uthmanicHafsFont.variable} ${surahNamesFont.variable} antialiased`}
+        className={`${warshFont.variable} ${qalounFont.variable} ${surahNamesFont.variable} antialiased`}
         suppressHydrationWarning
       >
         <GlobalProviders>
-          <Toaster 
+          <Toaster
             position="top-center"
             duration={2000}
             // richColors

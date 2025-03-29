@@ -2,6 +2,9 @@
  * Core Types for the Mushaf Application
  */
 
+// Font Types
+export type FontType = "warsh" | "qaloun";
+
 // Raw Data Types
 export interface RawAyahData {
   id: number;
@@ -78,6 +81,7 @@ export interface MushafSettings {
   fontSize: number;
   displayMode: "separate" | "continuous";
   isUIVisible: boolean;
+  fontType: FontType;
 }
 
 // Navigation Types
