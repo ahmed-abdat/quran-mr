@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { MushafContainer } from "@/features/quran/components/containers/MushafContainer";
 
 export const metadata: Metadata = {
-  title: "القرآ ن الكريم | The Holy Quran",
+  title: "القرآن الكريم",
   description: "تصفح القرآن الكريم بطريقة سهلة وبسيطة",
 };
 
